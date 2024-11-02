@@ -12,16 +12,76 @@
         }
 
         body {
+
             margin: 0;
             background-image: url('bg_image.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            
+            background-attachment: fixed;
             height: 100vh;
             overflow: hidden;
             font-family: 'Arial', sans-serif;
             color: white;
         }
+
+        
+        .page-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .page {
+            position: absolute;
+            width: 100%;
+            min-height: 100vh;
+            transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .page.next {
+            transform: translateY(100%);
+        }
+
+        .page.current {
+            transform: translateY(0);
+        }
+
+        .page.prev {
+            transform: translateY(-100%);
+        }
+
+        /* Cache for preloaded content */
+        #page-cache {
+            display: none;
+        }
+
+        #page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        .content-container {
+            position: relative;
+            min-height: 100vh;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        /* Transition states */
+        .transitioning-out .content-container {
+            transform: translateY(-100vh);
+        }
+
+        .transitioning-in .content-container {
+            transform: translateY(0);
+        }
+
 
         .logo-container {
             position: absolute;
@@ -34,6 +94,7 @@
   background-image: url('logo.png');
   background-size: contain; /* Ensures the image fits within the container */
   background-repeat: no-repeat;
+  background-attachment: fixed;
         }
 
         .letters-container {
@@ -80,6 +141,7 @@
     margin: 0;
     list-style: none;
 }
+
 
 .sidebar li {
     list-style: none;
@@ -128,31 +190,211 @@
                 transform: none;
             }
         }
+
+        .content {
+            /* Your content styles */
+        }
+
+        /* Add transition overlay */
+        .transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 998;
+        }
+
+        .transitioning .transition-overlay {
+            opacity: 1;
+        }
+
     </style>
 </head>
 <body>
-    <div class="logo-container">
-        <!-- Logo placeholder -->
+
+    <div class="page-container">
+        <div id="current-page" class="page current">
+            <!-- Your current page content -->
+        </div>
+        <div id="next-page" class="page next">
+            <!-- Next page content will be loaded here -->
+        </div>
     </div>
 
-    <div class="letters-container" id="letters">
-        <!-- Letters will be dynamically placed here -->
-    </div>
+    <!-- Hidden div to store cached pages -->
+    <div id="page-cache"></div>
 
-    <div class="sidebar">
-        <ul>
-            <li><a href="projects.html">Projects</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-    </div>
+    
 
     <div class="content">
         
     </div>
 
+    <div class="transition-overlay"></div>
+    <div class="content-container">
+        <div class="logo-container">
+            <!-- Logo placeholder -->
+        </div>
+    
+        <div class="letters-container" id="letters">
+            <!-- Letters will be dynamically placed here -->
+        </div>
+    
+        <div class="sidebar">
+            <ul>
+                <li><a href="projects.html" class="page-transition">Projects</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+        
+    </div>
+
     <script>
-        // Array of letters to be placed
+
+
+class PageTransitioner {
+            constructor() {
+                this.currentPage = document.getElementById('current-page');
+                this.nextPage = document.getElementById('next-page');
+                this.cache = document.getElementById('page-cache');
+                this.transitioning = false;
+
+                this.init();
+            }
+
+            init() {
+                // Preload all pages
+                this.preloadPages();
+                
+                // Setup click handlers
+                document.addEventListener('click', (e) => {
+                    const link = e.target.closest('a[href]');
+                    if (link && link.getAttribute('href').endsWith('.html')) {
+                        e.preventDefault();
+                        if (!this.transitioning) {
+                            this.loadPage(link.getAttribute('href'));
+                        }
+                    }
+                });
+            }
+
+            async preloadPages() {
+                // Get all internal links
+                const links = document.querySelectorAll('a[href$=".html"]');
+                
+                // Preload each page
+                for (const link of links) {
+                    const url = link.getAttribute('href');
+                    try {
+                        const response = await fetch(url);
+                        const html = await response.text();
+                        
+                        // Create a div to parse the HTML
+                        const div = document.createElement('div');
+                        div.innerHTML = html;
+                        
+                        // Store the main content
+                        const content = div.querySelector('main') || div.querySelector('.content');
+                        if (content) {
+                            const cache = document.createElement('div');
+                            cache.id = `cache-${url}`;
+                            cache.innerHTML = content.innerHTML;
+                            this.cache.appendChild(cache);
+                        }
+                    } catch (error) {
+                        console.error(`Failed to preload ${url}:`, error);
+                    }
+                }
+            }
+
+            async loadPage(url) {
+                this.transitioning = true;
+
+                // Try to get content from cache first
+                let content = this.cache.querySelector(`#cache-${url}`);
+                
+                if (!content) {
+                    // Load content if not cached
+                    try {
+                        const response = await fetch(url);
+                        const html = await response.text();
+                        const div = document.createElement('div');
+                        div.innerHTML = html;
+                        content = div.querySelector('main') || div.querySelector('.content');
+                    } catch (error) {
+                        console.error(`Failed to load ${url}:`, error);
+                        this.transitioning = false;
+                        return;
+                    }
+                }
+
+                // Prepare next page
+                this.nextPage.innerHTML = content.innerHTML;
+
+                // Update URL without page reload
+                window.history.pushState({}, '', url);
+
+                // Trigger transition
+                requestAnimationFrame(() => {
+                    this.currentPage.classList.add('prev');
+                    this.nextPage.classList.remove('next');
+                    this.nextPage.classList.add('current');
+
+                    // After transition
+                    setTimeout(() => {
+                        this.currentPage.innerHTML = this.nextPage.innerHTML;
+                        this.currentPage.classList.remove('prev');
+                        this.currentPage.classList.add('current');
+                        this.nextPage.classList.remove('current');
+                        this.nextPage.classList.add('next');
+                        this.nextPage.innerHTML = '';
+                        this.transitioning = false;
+                    }, 800); // Match this with your CSS transition duration
+                });
+            }
+        }
+
+        // Initialize the transitioner
+        document.addEventListener('DOMContentLoaded', () => {
+            new PageTransitioner();
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', () => {
+            if (!transitioner.transitioning) {
+                transitioner.loadPage(window.location.pathname);
+            }
+        });
+
+document.addEventListener('DOMContentLoaded', () => {
+            // Handle page transitions
+            document.querySelectorAll('a.page-transition').forEach(link => {
+                link.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    const nextPage = link.href;
+                    
+                    // Start transition
+                    document.body.classList.add('transitioning-out');
+                    
+                    // Wait for transition animation
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    // Navigate to next page
+                    window.location.href = nextPage;
+                });
+            });
+        });
+
+
+
+
+// Array of letters to be placed
         const letters = ['A', 'R', 'T', 'I', 'S', 'D', 'E', 'A2', 'D2'];
         
         // Function to get random position within constraints
