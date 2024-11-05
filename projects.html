@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,15 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+
+            .gif-container {
+            position: fixed;
+            right: -3%; /* Adjustable position */
+            top: 65%; /* Adjust for vertical centering if needed */
+            transform: translateY(-50%); /* Center vertically */
+            z-index: 1000; /* Ensure it stays above other content */
+            display: none; /* Hide by default */
+        }
         }
 
         body {
@@ -22,7 +32,7 @@
             font-family: 'Arial', sans-serif;
             color: white;
         }
-
+        
         .page-container {
             position: fixed;
             width: 100%;
@@ -154,7 +164,13 @@
         }
     </style>
 </head>
+
 <body>
+
+    <div class="gif-container" id="gif-container">
+        <img src="output.gif" alt="Loading GIF" id="loading-gif">
+    </div>
+
 
     <div class="page-container">
         <div id="current-page" class="page current">
@@ -185,7 +201,25 @@
     </div>
 
     <script>
-       class PageTransitioner {
+        
+        //for the gif
+        window.addEventListener('load', () => {
+            const gifContainer = document.getElementById('gif-container');
+            gifContainer.style.display = 'block'; // Show the GIF
+
+            // Remove the GIF after it finishes playing
+            const gif = document.getElementById('loading-gif');
+            gif.addEventListener('animationend', () => {
+                gifContainer.style.display = 'none'; // Hide the GIF after it plays
+            });
+
+            // Alternatively, you could set a timeout if the GIF length is known
+            setTimeout(() => {
+                gifContainer.style.display = 'none';
+            }, 7000); // Adjust time as necessary
+        });
+
+        class PageTransitioner {
             constructor() {
                 this.currentPage = document.getElementById('current-page');
                 this.nextPage = document.getElementById('next-page');
@@ -198,7 +232,7 @@
             init() {
                 // Preload all pages
                 this.preloadPages();
-                
+
                 // Setup click handlers
                 document.addEventListener('click', (e) => {
                     const link = e.target.closest('a[href]');
@@ -214,18 +248,18 @@
             async preloadPages() {
                 // Get all internal links
                 const links = document.querySelectorAll('a[href$=".html"]');
-                
+
                 // Preload each page
                 for (const link of links) {
                     const url = link.getAttribute('href');
                     try {
                         const response = await fetch(url);
                         const html = await response.text();
-                        
+
                         // Create a div to parse the HTML
                         const div = document.createElement('div');
                         div.innerHTML = html;
-                        
+
                         // Store the main content
                         const content = div.querySelector('main') || div.querySelector('.content');
                         if (content) {
@@ -245,7 +279,7 @@
 
                 // Try to get content from cache first
                 let content = this.cache.querySelector(`#cache-${url}`);
-                
+
                 if (!content) {
                     // Load content if not cached
                     try {
@@ -305,16 +339,19 @@
                 link.addEventListener('click', async (e) => {
                     e.preventDefault();
                     const nextPage = link.href;
-                    
+
                     // Start transition
                     document.body.classList.add('transitioning-out');
-                    
+
                     // Wait for transition animation
                     await new Promise(resolve => setTimeout(resolve, 500));
-                    
+
                     // Navigate to next page
                     window.location.href = nextPage;
                 });
             });
         });
-    </
+    </script>
+</body>
+
+</html>
