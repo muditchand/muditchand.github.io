@@ -3,9 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Artistic Portfolio</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
     <style>
+
+
+        
         * {
             margin: 0;
             padding: 0;
@@ -18,6 +23,7 @@
             transform: translateY(-50%); /* Center vertically */
             z-index: 1000; /* Ensure it stays above other content */
             display: none; /* Hide by default */
+            z-index: 10;
         }
         }
 
@@ -33,6 +39,10 @@
             color: white;
         }
         
+        
+        
+
+
         .page-container {
             position: fixed;
             width: 100%;
@@ -97,6 +107,7 @@
             width: 50px;
             height: 50px;
             display: inline-block; /* Make it block level to contain the background */
+            z-index: 100;
         }
 
         .logo {
@@ -118,6 +129,7 @@
             backdrop-filter: blur(0px);
             display: flex;
             justify-content: center; /* Center the links horizontally */
+            z-index: 50;
         }
 
         .sidebar ul {
@@ -126,10 +138,12 @@
             padding: 0;
             margin: 0;
             list-style: none;
+            z-index: 50;
         }
 
         .sidebar li {
             list-style: none;
+            z-index: 50;
         }
 
         .sidebar a {
@@ -139,11 +153,14 @@
             padding: 10px;
             display: inline-block;
             transition: all 0.3s ease;
+            z-index: 50;
+
         }
 
         .sidebar a:hover {
             transform: translateY(-5px);
             color: #f0f0f0;
+            z-index: 50;
         }
 
         .transition-overlay {
@@ -166,8 +183,12 @@
 </head>
 
 <body>
-
+   
+    
+   
+    
     <div class="gif-container" id="gif-container">
+        
         <img src="output.gif" alt="Loading GIF" id="loading-gif">
     </div>
 
@@ -199,41 +220,63 @@
             </ul>
         </div>
     </div>
+   <!-- carousel script -->
+    <script>
+        const carouselItems = document.querySelectorAll('.carousel-item');
+        const prevBtn = document.querySelector('.carousel-control.prev');
+        const nextBtn = document.querySelector('.carousel-control.next');
+        let currentIndex = 0;
+    
+        function showSlide(index) {
+          carouselItems.forEach((item, i) => {
+            item.classList.toggle('active', i === index);
+          });
+        }
+    
+        prevBtn.addEventListener('click', () => {
+          currentIndex = (currentIndex - 1 + carouselItems.length) % carouselItems.length;
+          showSlide(currentIndex);
+        });
+    
+        nextBtn.addEventListener('click', () => {
+          currentIndex = (currentIndex + 1) % carouselItems.length;
+          showSlide(currentIndex);
+        });
+    
+        showSlide(currentIndex);
+      </script>
+
+
 
     <script>
-        
-        //for the gif
         window.addEventListener('load', () => {
             const gifContainer = document.getElementById('gif-container');
             gifContainer.style.display = 'block'; // Show the GIF
 
-            // Remove the GIF after it finishes playing
             const gif = document.getElementById('loading-gif');
             gif.addEventListener('animationend', () => {
                 gifContainer.style.display = 'none'; // Hide the GIF after it plays
             });
 
-            // Alternatively, you could set a timeout if the GIF length is known
             setTimeout(() => {
                 gifContainer.style.display = 'none';
-            }, 7000); // Adjust time as necessary
+            }, 7000); // Adjust time if needed
         });
-
+    </script>
+    
+    <!-- Page Transitioner Class Script -->
+    <script>
         class PageTransitioner {
             constructor() {
                 this.currentPage = document.getElementById('current-page');
                 this.nextPage = document.getElementById('next-page');
                 this.cache = document.getElementById('page-cache');
                 this.transitioning = false;
-
                 this.init();
             }
 
             init() {
-                // Preload all pages
                 this.preloadPages();
-
-                // Setup click handlers
                 document.addEventListener('click', (e) => {
                     const link = e.target.closest('a[href]');
                     if (link && link.getAttribute('href').endsWith('.html')) {
@@ -246,21 +289,15 @@
             }
 
             async preloadPages() {
-                // Get all internal links
                 const links = document.querySelectorAll('a[href$=".html"]');
-
-                // Preload each page
                 for (const link of links) {
                     const url = link.getAttribute('href');
                     try {
                         const response = await fetch(url);
                         const html = await response.text();
-
-                        // Create a div to parse the HTML
                         const div = document.createElement('div');
                         div.innerHTML = html;
 
-                        // Store the main content
                         const content = div.querySelector('main') || div.querySelector('.content');
                         if (content) {
                             const cache = document.createElement('div');
@@ -276,12 +313,9 @@
 
             async loadPage(url) {
                 this.transitioning = true;
-
-                // Try to get content from cache first
                 let content = this.cache.querySelector(`#cache-${url}`);
 
                 if (!content) {
-                    // Load content if not cached
                     try {
                         const response = await fetch(url);
                         const html = await response.text();
@@ -295,19 +329,14 @@
                     }
                 }
 
-                // Prepare next page
                 this.nextPage.innerHTML = content.innerHTML;
-
-                // Update URL without page reload
                 window.history.pushState({}, '', url);
 
-                // Trigger transition
                 requestAnimationFrame(() => {
                     this.currentPage.classList.add('prev');
                     this.nextPage.classList.remove('next');
                     this.nextPage.classList.add('current');
 
-                    // After transition
                     setTimeout(() => {
                         this.currentPage.innerHTML = this.nextPage.innerHTML;
                         this.currentPage.classList.remove('prev');
@@ -316,37 +345,35 @@
                         this.nextPage.classList.add('next');
                         this.nextPage.innerHTML = '';
                         this.transitioning = false;
-                    }, 800); // Match this with your CSS transition duration
+                    }, 800);
                 });
             }
         }
 
-        // Initialize the transitioner
         document.addEventListener('DOMContentLoaded', () => {
             new PageTransitioner();
         });
+    </script>
 
-        // Handle browser back/forward buttons
+    <!-- Browser Back/Forward Button Script -->
+    <script>
         window.addEventListener('popstate', () => {
             if (!transitioner.transitioning) {
                 transitioner.loadPage(window.location.pathname);
             }
         });
+    </script>
 
+    <!-- Click Transition Handler Script -->
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Handle page transitions
             document.querySelectorAll('a.page-transition').forEach(link => {
                 link.addEventListener('click', async (e) => {
                     e.preventDefault();
                     const nextPage = link.href;
-
-                    // Start transition
                     document.body.classList.add('transitioning-out');
 
-                    // Wait for transition animation
                     await new Promise(resolve => setTimeout(resolve, 500));
-
-                    // Navigate to next page
                     window.location.href = nextPage;
                 });
             });
