@@ -130,18 +130,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Execute on page load
+    // gif removal
     window.onload = function() {
         console.log("Page loaded, starting timer for GIF removal...");
         setTimeout(removeGifContainer, 7000); // Call removeGifContainer after 7000ms
     };
 
+
+
+//shifting the container for grid cards
     document.addEventListener('DOMContentLoaded', () => {
         const gridContainer = document.querySelector('.grid-container');
         const backArrow = document.querySelector('.back-arrow');
         const cards = document.querySelectorAll('.card');
     
-        // Add click handlers to all cards
         cards.forEach(card => {
             card.addEventListener('click', (e) => {
                 e.preventDefault(); // Prevent default navigation
@@ -157,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     
-        // Add click handler to back arrow
+        // moving shifting the back arrow
         backArrow.addEventListener('click', () => {
             gridContainer.classList.remove('slide-out');
             backArrow.classList.remove('visible');
@@ -168,4 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 300);
         });
     });
+    
+
+
     
