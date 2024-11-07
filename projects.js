@@ -136,6 +136,36 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(removeGifContainer, 7000); // Call removeGifContainer after 7000ms
     };
 
-
-
+    document.addEventListener('DOMContentLoaded', () => {
+        const gridContainer = document.querySelector('.grid-container');
+        const backArrow = document.querySelector('.back-arrow');
+        const cards = document.querySelectorAll('.card');
+    
+        // Add click handlers to all cards
+        cards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent default navigation
+                gridContainer.classList.add('slide-out');
+                
+                // Show the arrow with a slight delay
+                setTimeout(() => {
+                    backArrow.style.display = 'block';
+                    setTimeout(() => {
+                        backArrow.classList.add('visible');
+                    }, 50);
+                }, 300);
+            });
+        });
+    
+        // Add click handler to back arrow
+        backArrow.addEventListener('click', () => {
+            gridContainer.classList.remove('slide-out');
+            backArrow.classList.remove('visible');
+            
+            // Hide the arrow completely after the fade out
+            setTimeout(() => {
+                backArrow.style.display = 'none';
+            }, 300);
+        });
+    });
     

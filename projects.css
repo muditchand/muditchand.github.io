@@ -46,6 +46,29 @@
     left: 5%;
     width: 20%; /* Adjust width as needed */
     z-index: 20;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.grid-container.slide-out {
+    transform: translateX(-110%);
+}
+
+
+.back-arrow {
+    position: absolute;
+    top: 50%;
+    left:5%;  /* Adjust this value to position the arrow where you want */
+    transform: translateY(-50%);
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+    z-index: 21;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+}
+
+.back-arrow.visible {
+    opacity: 1;
 }
 
 .card {
