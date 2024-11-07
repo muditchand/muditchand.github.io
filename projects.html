@@ -5,194 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Artistic Portfolio</title>
+    <script src="projects.js"></script>
+    <link rel="stylesheet" href="projects.css">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
-    <style>
-
-
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-
-            .gif-container {
-            position: fixed;
-            right: -3%; /* Adjustable position */
-            top: 65%; /* Adjust for vertical centering if needed */
-            transform: translateY(-50%); /* Center vertically */
-            z-index: 1000; /* Ensure it stays above other content */
-            display: none; /* Hide by default */
-            z-index: 10;
-        }
-        }
-
-        body {
-            margin: 0;
-            background-image: url('bg_image.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
-            overflow: hidden;
-            font-family: 'Arial', sans-serif;
-            color: white;
-        }
-        
-        
-        
-
-
-        .page-container {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .page {
-            position: absolute;
-            width: 100%;
-            min-height: 100vh;
-            transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
-        }
-
-        .page.next {
-            transform: translateY(100%);
-        }
-
-        .page.current {
-            transform: translateY(0);
-        }
-
-        .page.prev {
-            transform: translateY(-100%);
-        }
-
-        /* Cache for preloaded content */
-        #page-cache {
-            display: none;
-        }
-
-        #page-transition {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        .content-container {
-            position: relative;
-            min-height: 100vh;
-            transition: transform 0.5s ease-in-out;
-        }
-
-        /* Transition states */
-        .transitioning-out .content-container {
-            transform: translateY(-100vh);
-        }
-
-        .transitioning-in .content-container {
-            transform: translateY(0);
-        }
-
-        .logo-container {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 50px;
-            display: inline-block; /* Make it block level to contain the background */
-            z-index: 100;
-        }
-
-        .logo {
-            width: 100%;
-            height: 100%;
-            background-image: url('logo.png');
-            background-size: contain; /* Ensures the image fits within the container */
-            background-repeat: no-repeat;
-        }
-
-        .sidebar {
-            position: fixed;
-            bottom: 0; /* Stick to the bottom of the viewport */
-            left: 50%; /* Center horizontally */
-            transform: translateX(-50%); /* Center align */
-            width: 100%; /* Full width to span across the screen */
-            background-color: rgba(0, 0, 0, 0);
-            padding: 10px 0;
-            backdrop-filter: blur(0px);
-            display: flex;
-            justify-content: center; /* Center the links horizontally */
-            z-index: 50;
-        }
-
-        .sidebar ul {
-            display: flex; /* Arrange items in a row */
-            gap: 30px; /* Space between links */
-            padding: 0;
-            margin: 0;
-            list-style: none;
-            z-index: 50;
-        }
-
-        .sidebar li {
-            list-style: none;
-            z-index: 50;
-        }
-
-        .sidebar a {
-            color: white;
-            text-decoration: none;
-            font-size: 1rem;
-            padding: 10px;
-            display: inline-block;
-            transition: all 0.3s ease;
-            z-index: 50;
-
-        }
-
-        .sidebar a:hover {
-            transform: translateY(-5px);
-            color: #f0f0f0;
-            z-index: 50;
-        }
-
-        .transition-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            z-index: 998;
-        }
-
-        .transitioning .transition-overlay {
-            opacity: 1;
-        }
-    </style>
+    
 </head>
 
 <body>
    
-    
-   
-    
-    <div class="gif-container" id="gif-container">
-        
-        <img src="output.gif" alt="Loading GIF" id="loading-gif">
-    </div>
-
-
     <div class="page-container">
         <div id="current-page" class="page current">
             <!-- Your current page content -->
@@ -201,17 +22,46 @@
             <!-- Next page content will be loaded here -->
         </div>
     </div>
+   
+    
+    <div class="gif-container" id="gif-container">
+        
+        <img src="output.gif" alt="Loading GIF" id="loading-gif">
+    </div>
+
+
+    
 
     <!-- Hidden div to store cached pages -->
     <div id="page-cache"></div>
 
     <div class="content"></div>
+
+
     <div class="transition-overlay"></div>
+
+
     <div class="content-container">
         <a href="index.html" class="logo-container">
-            <div class="logo"></div> <!-- Logo image within a clickable area -->
+            <div class="logo"></div> 
         </a>
         <div class="transition-overlay"></div>
+        <div class="grid-container">
+            <a href="sketchbook.html" class="card" style="background-image: url('./cards_bg/sketchbook_bg.png');">
+                Sketchbook
+            </a>
+            <a href="ui_work.html" class="card" style="background-image: url('./cards_bg/ui_work_bg.png');">
+                UI Work
+            </a>
+            <a href="1st_year_collection.html" class="card" style="background-image: url('./cards_bg/1st_year_collection_bg.png');">
+                1st Year Collection
+            </a>
+            <a href="other_projects.html" class="card" style="background-image: url('./cards_bg/other_work_bg.png');">
+                Other Projects
+            </a>
+        </div>
+
+        
         <div class="sidebar">
             <ul>
                 <li><a href="projects.html" class="page-transition">Projects</a></li>
@@ -220,165 +70,7 @@
             </ul>
         </div>
     </div>
-   <!-- carousel script -->
-    <script>
-        const carouselItems = document.querySelectorAll('.carousel-item');
-        const prevBtn = document.querySelector('.carousel-control.prev');
-        const nextBtn = document.querySelector('.carousel-control.next');
-        let currentIndex = 0;
-    
-        function showSlide(index) {
-          carouselItems.forEach((item, i) => {
-            item.classList.toggle('active', i === index);
-          });
-        }
-    
-        prevBtn.addEventListener('click', () => {
-          currentIndex = (currentIndex - 1 + carouselItems.length) % carouselItems.length;
-          showSlide(currentIndex);
-        });
-    
-        nextBtn.addEventListener('click', () => {
-          currentIndex = (currentIndex + 1) % carouselItems.length;
-          showSlide(currentIndex);
-        });
-    
-        showSlide(currentIndex);
-      </script>
-
-
-
-    <script>
-        window.addEventListener('load', () => {
-            const gifContainer = document.getElementById('gif-container');
-            gifContainer.style.display = 'block'; // Show the GIF
-
-            const gif = document.getElementById('loading-gif');
-            gif.addEventListener('animationend', () => {
-                gifContainer.style.display = 'none'; // Hide the GIF after it plays
-            });
-
-            setTimeout(() => {
-                gifContainer.style.display = 'none';
-            }, 7000); // Adjust time if needed
-        });
-    </script>
-    
-    <!-- Page Transitioner Class Script -->
-    <script>
-        class PageTransitioner {
-            constructor() {
-                this.currentPage = document.getElementById('current-page');
-                this.nextPage = document.getElementById('next-page');
-                this.cache = document.getElementById('page-cache');
-                this.transitioning = false;
-                this.init();
-            }
-
-            init() {
-                this.preloadPages();
-                document.addEventListener('click', (e) => {
-                    const link = e.target.closest('a[href]');
-                    if (link && link.getAttribute('href').endsWith('.html')) {
-                        e.preventDefault();
-                        if (!this.transitioning) {
-                            this.loadPage(link.getAttribute('href'));
-                        }
-                    }
-                });
-            }
-
-            async preloadPages() {
-                const links = document.querySelectorAll('a[href$=".html"]');
-                for (const link of links) {
-                    const url = link.getAttribute('href');
-                    try {
-                        const response = await fetch(url);
-                        const html = await response.text();
-                        const div = document.createElement('div');
-                        div.innerHTML = html;
-
-                        const content = div.querySelector('main') || div.querySelector('.content');
-                        if (content) {
-                            const cache = document.createElement('div');
-                            cache.id = `cache-${url}`;
-                            cache.innerHTML = content.innerHTML;
-                            this.cache.appendChild(cache);
-                        }
-                    } catch (error) {
-                        console.error(`Failed to preload ${url}:`, error);
-                    }
-                }
-            }
-
-            async loadPage(url) {
-                this.transitioning = true;
-                let content = this.cache.querySelector(`#cache-${url}`);
-
-                if (!content) {
-                    try {
-                        const response = await fetch(url);
-                        const html = await response.text();
-                        const div = document.createElement('div');
-                        div.innerHTML = html;
-                        content = div.querySelector('main') || div.querySelector('.content');
-                    } catch (error) {
-                        console.error(`Failed to load ${url}:`, error);
-                        this.transitioning = false;
-                        return;
-                    }
-                }
-
-                this.nextPage.innerHTML = content.innerHTML;
-                window.history.pushState({}, '', url);
-
-                requestAnimationFrame(() => {
-                    this.currentPage.classList.add('prev');
-                    this.nextPage.classList.remove('next');
-                    this.nextPage.classList.add('current');
-
-                    setTimeout(() => {
-                        this.currentPage.innerHTML = this.nextPage.innerHTML;
-                        this.currentPage.classList.remove('prev');
-                        this.currentPage.classList.add('current');
-                        this.nextPage.classList.remove('current');
-                        this.nextPage.classList.add('next');
-                        this.nextPage.innerHTML = '';
-                        this.transitioning = false;
-                    }, 800);
-                });
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            new PageTransitioner();
-        });
-    </script>
-
-    <!-- Browser Back/Forward Button Script -->
-    <script>
-        window.addEventListener('popstate', () => {
-            if (!transitioner.transitioning) {
-                transitioner.loadPage(window.location.pathname);
-            }
-        });
-    </script>
-
-    <!-- Click Transition Handler Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('a.page-transition').forEach(link => {
-                link.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    const nextPage = link.href;
-                    document.body.classList.add('transitioning-out');
-
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    window.location.href = nextPage;
-                });
-            });
-        });
-    </script>
+ 
 </body>
 
 </html>
