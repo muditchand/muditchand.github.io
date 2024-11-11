@@ -63,12 +63,6 @@
             opacity: 1;
         }
 
-        .turn-book {
-            width: 500px !important;
-            height: 400px !important;
-            transform-style: preserve-3d;
-        }
-
         .close-book::before,
 .close-book::after {
     content: '';
@@ -85,7 +79,7 @@
 
 
     #flipbook {
-        position: relative;
+        
         justify-content: center;
         width: 500px;
         height: 400px;

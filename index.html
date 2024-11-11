@@ -3,36 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Artisdead</title>
     <title>artisdead</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    console.log("jQuery loaded");
-</script>
-
-    <script> src='turn.js' </script>
     <script src="index.js"></script>
-    
     <link rel="stylesheet" href="index.css">
-   
 </head>
 <body>
 
-    <div class="website-container">
-        <div id="current-website" class="website current">
+    <div class="page-container">
+        <div id="current-page" class="page current">
             <!-- Your current page content -->
         </div>
-        <div id="next-website" class="website next">
+        <div id="next-page" class="page next">
             <!-- Next page content will be loaded here -->
         </div>
     </div>
 
     <!-- Hidden div to store cached pages -->
-    <div id="website-cache"></div>
+    <div id="page-cache"></div>
 
-    
+
 
     <div class="content">
-        
+
     </div>
 
     <div class="transition-overlay"></div>
@@ -40,21 +33,20 @@
         <div class="logo-container">
             <!-- Logo placeholder -->
         </div>
-    
+
         <div class="letters-container" id="letters">
             <!-- Letters will be dynamically placed here -->
         </div>
-    
+
         <div class="sidebar">
             <ul>
-                <li><a href="projects.html" class="website-transition">Projects</a></li>
+                <li><a href="projects.html" class="page-transition">Projects</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
         </div>
-        
+
     </div>
 
-    
+
 </body>
-</html>

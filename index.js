@@ -1,14 +1,11 @@
-// PageTransitioner Class for Smooth Page Transitions
 class PageTransitioner {
     constructor() {
         this.currentPage = document.getElementById('current-page');
         this.nextPage = document.getElementById('next-page');
         this.cache = document.getElementById('page-cache');
         this.transitioning = false;
-
         this.init();
     }
-
     init() {
         this.preloadPages(); // Preload all pages
         document.addEventListener('click', (e) => {
@@ -21,7 +18,6 @@ class PageTransitioner {
             }
         });
     }
-
     async preloadPages() {
         const links = document.querySelectorAll('a[href$=".html"]');
         for (const link of links) {
@@ -29,10 +25,8 @@ class PageTransitioner {
             try {
                 const response = await fetch(url);
                 const html = await response.text();
-
                 const div = document.createElement('div');
                 div.innerHTML = html;
-
                 const content = div.querySelector('main') || div.querySelector('.content');
                 if (content) {
                     const cache = document.createElement('div');
@@ -45,7 +39,6 @@ class PageTransitioner {
             }
         }
     }
-
     async loadPage(url) {
         this.transitioning = true;
         let content = this.cache.querySelector(`#cache-${url}`);
@@ -62,15 +55,12 @@ class PageTransitioner {
                 return;
             }
         }
-
         this.nextPage.innerHTML = content.innerHTML;
         window.history.pushState({}, '', url);
-
         requestAnimationFrame(() => {
             this.currentPage.classList.add('prev');
             this.nextPage.classList.remove('next');
             this.nextPage.classList.add('current');
-
             setTimeout(() => {
                 this.currentPage.innerHTML = this.nextPage.innerHTML;
                 this.currentPage.classList.remove('prev');
@@ -83,19 +73,16 @@ class PageTransitioner {
         });
     }
 }
-
 // Initialize PageTransitioner
 document.addEventListener('DOMContentLoaded', () => {
     new PageTransitioner();
 });
-
 // Handle browser back/forward buttons
 window.addEventListener('popstate', () => {
     if (!transitioner.transitioning) {
         transitioner.loadPage(window.location.pathname);
     }
 });
-
 // Click Transition Handler for Page Transitions
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('a.page-transition').forEach(link => {
@@ -108,10 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-
 // Array of letters to be placed
 const letters = ['A', 'R', 'T', 'I', 'S', 'D', 'E', 'A2', 'D2'];
-
 // Random position function for letters
 function getRandomPosition(element) {
     const container = document.querySelector('.letters-container');
@@ -119,7 +104,6 @@ function getRandomPosition(element) {
     const y = Math.random() * (container.offsetHeight - element.offsetHeight);
     return [x, y];
 }
-
 // Check for overlapping positions
 function checkOverlap(x, y, existingPositions) {
     const buffer = 80;
@@ -128,23 +112,19 @@ function checkOverlap(x, y, existingPositions) {
         return distance < buffer;
     });
 }
-
 // Place letters with collision detection
 window.addEventListener('load', () => {
     const container = document.getElementById('letters');
     const existingPositions = [];
-
     letters.forEach(letter => {
         const letterDiv = document.createElement('div');
         letterDiv.className = 'letter';
         letterDiv.innerHTML = `<img src="home_Image/${letter}.png" alt="${letter}" style="width: 100%; height: 100%;">`;
         container.appendChild(letterDiv);
-
         let x, y;
         do {
             [x, y] = getRandomPosition(letterDiv);
         } while (checkOverlap(x, y, existingPositions));
-
         existingPositions.push({ x, y });
         letterDiv.style.left = `${x}px`;
         letterDiv.style.top = `${y}px`;
@@ -153,14 +133,12 @@ window.addEventListener('load', () => {
         letterDiv.style.transform = `rotate(${rotation}deg)`;
     });
 });
-
 // Make letters draggable (optional feature)
 document.querySelectorAll('.letter').forEach(letter => {
     letter.addEventListener('click', () => {
         console.log('Letter clicked:', letter.innerHTML);
     });
 });
-
 // Handle resizing and repositioning letters
 let resizeTimeout;
 window.addEventListener('resize', () => {
@@ -168,13 +146,11 @@ window.addEventListener('resize', () => {
     resizeTimeout = setTimeout(() => {
         const letters = document.querySelectorAll('.letter');
         const existingPositions = [];
-
         letters.forEach(letter => {
             let x, y;
             do {
                 [x, y] = getRandomPosition(letter);
             } while (checkOverlap(x, y, existingPositions));
-
             existingPositions.push({ x, y });
             letter.style.left = `${x}px`;
             letter.style.top = `${y}px`;
