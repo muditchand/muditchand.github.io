@@ -4,21 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="http://www.turnjs.com/lib/turn.min.js"></script>
     <title>artisdead</title>
     <script src="projects.js"></script>
     <link rel="stylesheet" href="projects.css">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
-    
+   
 </head>
 
 <body>
+
+
+    <div class="sketchbook-container">
+        <div class="close-book"></div>
+		<div id="flipbook">
+			<!-- Front Cover -->
+			<div class="hard" style="background-image: url('posters/book_front.png');"></div>
+			<div class="hard" style="background-image: url('posters/book_back.png');"></div>
+
+			<!-- Pages with images -->
+			<div class="book" style="background-image: url('posters/1.jpg');"></div>
+			<div class="book" style="background-image: url('posters/2.jpg');"></div>
+			<div class="book" style="background-image: url('posters/3.jpg');"></div>
+			<div class="book" style="background-image: url('posters/4.jpg');"></div>
+			<div class="book" style="background-image: url('posters/5.jpg');"></div>
+			<div class="book" style="background-image: url('posters/6.jpg');"></div>
+
+			<!-- Back Cover -->
+			<div class="hard" style="background-image: url('posters/book_back.png');"></div>
+			<div class="hard" style="background-image: url('posters/book_back.png');"></div>
+		</div>
+	</div>
+    
+
+
+    
+    
    
-    <div class="page-container">
-        <div id="current-page" class="page current">
+    <div class="website-container">
+        <div id="current-website" class="website current">
             <!-- Your current page content -->
         </div>
-        <div id="next-page" class="page next">
+        <div id="next-website" class="website next">
             <!-- Next page content will be loaded here -->
         </div>
     </div>
@@ -33,7 +61,7 @@
     
 
     <!-- Hidden div to store cached pages -->
-    <div id="page-cache"></div>
+    <div id="website-cache"></div>
 
     <div class="content"></div>
 

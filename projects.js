@@ -170,7 +170,101 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 300);
         });
     });
-    
 
-
+    $(document).ready(function() {
+        // Initialize flipbook with optimized configuration for smooth movement
+        $("#flipbook").turn({
+            width: 500,
+            height: 400,
+            autoCenter: true,
+            duration: 1500,        // Increased duration for smoother animation
+            gradients: true,
+            acceleration: true,    // Enable acceleration but with easing
+            display: 'double',
+            elevation: 50,
+            pages: 8,
+            turnCorners: 'bl,br', // Specify which corners to use for turning
+            easing: function(x, t, b, c, d) {
+                // Custom easing function for smoother movement
+                return c*((t=t/d-1)*t*t + 1) + b;
+            },
+            when: {
+                turning: function(event, page, view) {
+                    // Add transition for position changes
+                    $(this).css({
+                        'transition': 'all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1.000)'
+                    });
+                    $(this).turn('center');
+                },
+                turned: function(event, page, view) {
+                    // Reset transition after turn complete
+                    $(this).css({
+                        'transition': 'none'
+                    });
+                    $(this).turn('center');
+                },
+                start: function(event, pageObject, corner) {
+                    // Prepare for smooth movement
+                    if (corner) {
+                        $(this).css({
+                            'transform-origin': corner === 'bl' ? '0% 50%' : '100% 50%'
+                        });
+                    }
+                }
+            }
+        });
     
+        // Add CSS class for smooth movement
+        $("#flipbook").addClass('smooth-movement');
+    
+        // Make sure book is initially closed with transition
+        $("#flipbook").turn('page', 1);
+    
+        // Handle sketchbook card click with improved timing
+        $('#sketchbook-card').click(function() {
+            $('.grid-container').addClass('slide-out');
+            $('.back-arrow').addClass('visible');
+            
+            // Improved timing for container positioning
+            setTimeout(() => {
+                $('.sketchbook-container').addClass('active');
+                // Add small delay before centering for smoother appearance
+                setTimeout(() => {
+                    $("#flipbook").turn('center');
+                }, 50);
+                $('.close-book').addClass('visible');
+            }, 300); // Increased delay for smoother transition
+        });
+    
+        // Handle close button click with smoother transitions
+        $('.close-book').click(function() {
+            closeSketchbook();
+        });
+    
+        // Handle back arrow click with smoother transitions
+        $('.back-arrow').click(function() {
+            closeSketchbook();
+            // Add delay before sliding grid back
+            setTimeout(() => {
+                $('.grid-container').removeClass('slide-out');
+            }, 150);
+            $(this).removeClass('visible');
+        });
+    
+        function closeSketchbook() {
+            $('.close-book').removeClass('visible');
+            // Add transition before returning to first page
+            $("#flipbook").css({
+                'transition': 'all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1.000)'
+            });
+            $("#flipbook").turn('page', 1);
+            
+            setTimeout(() => {
+                $('.sketchbook-container').removeClass('active');
+                // Reset transition
+                $("#flipbook").css({
+                    'transition': 'none'
+                });
+            }, 500);
+        }
+    });

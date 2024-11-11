@@ -21,38 +21,39 @@
         }
 
         
-        .page-container {
+        .website-container {
             position: fixed;
             width: 100%;
             height: 100%;
             overflow: hidden;
         }
 
-        .page {
+        .website {
             position: absolute;
             width: 100%;
             min-height: 100vh;
             transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
         }
 
-        .page.next {
+        .website.next {
             transform: translateY(100%);
         }
 
-        .page.current {
+        .website.current {
             transform: translateY(0);
         }
 
-        .page.prev {
+        .website.prev {
             transform: translateY(-100%);
         }
 
+
         /* Cache for preloaded content */
-        #page-cache {
+        #website-cache {
             display: none;
         }
 
-        #page-transition {
+        #website-transition {
             position: fixed;
             top: 0;
             left: 0;
