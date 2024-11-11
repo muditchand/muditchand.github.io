@@ -44,6 +44,8 @@ class PageTransitioner {
         }
     }
 
+    
+
     async loadPage(url) {
         this.transitioning = true;
         let content = this.cache.querySelector(`#cache-${url}`);
@@ -78,6 +80,9 @@ class PageTransitioner {
                 this.nextPage.classList.add('next');
                 this.nextPage.innerHTML = '';
                 this.transitioning = false;
+                this.nextPage.querySelectorAll('.content > *').forEach(el => {
+                    el.classList.add('fade-in');
+                });
             }, 800);
         });
     }
@@ -94,6 +99,10 @@ window.addEventListener('popstate', () => {
         window.transitioner.loadPage(window.location.pathname);
     }
 });
+window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+});
+
 
 // Click Transition Handler for Page Links
 document.addEventListener('DOMContentLoaded', () => {
