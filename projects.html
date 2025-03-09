@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="jquery-3.7.1.js" ></script>
+    <script src="./turn.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
+    <title>artisdead</title>
+    <script src="projects.js"></script>
+    <link rel="stylesheet" href="projects.css">
+</head>
+
+<body>
+    <div class="sketchbook-container">
+        <div class="close-book"></div>
+        <div id="flipbook">
+            <!-- Front Cover -->
+            <div class="hard" style="background-image: url('posters/book_front.png');"></div>
+            <div class="hard" style="background-image: url('posters/book_back.png');"></div>
+
+            <!-- Pages with images -->
+            <div class="book" style="background-image: url('posters/1.jpg');"></div>
+            <div class="book" style="background-image: url('posters/2.jpg');"></div>
+            <div class="book" style="background-image: url('posters/3.jpg');"></div>
+            <div class="book" style="background-image: url('posters/4.jpg');"></div>
+            <div class="book" style="background-image: url('posters/5.jpg');"></div>
+            <div class="book" style="background-image: url('posters/6.jpg');"></div>
+            <div class="book" style="background-image: url('posters/7.jpg');"></div>
+            <div class="book" style="background-image: url('posters/8.jpeg');"></div>
+            <div class="book" style="background-image: url('posters/9.jpeg');"></div>
+            <div class="book" style="background-image: url('posters/10.jpg');"></div>
+            <div class="book" style="background-image: url('posters/11.jpg');"></div>
+            <div class="book" style="background-image: url('posters/12.jpg');"></div>
+            <div class="book" style="background-image: url('posters/13.jpg');"></div>
+            <div class="book" style="background-image: url('posters/14.jpg');"></div>
+            <div class="book" style="background-image: url('posters/15.jpg');"></div>
+
+            <!-- Back Cover -->
+            <div class="hard" style="background-image: url('posters/book_back.png');"></div>
+            <div class="hard" style="background-image: url('posters/book_back.png');"></div>
+        </div>
+    </div>
+
+    <!-- PDF Viewer Container -->
+    <div class="pdf-collection-container">
+        <div class="close-pdf-collection"></div>
+        <div class="pdf-grid">
+            <!-- PDF thumbnails will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <!-- PDF Viewer -->
+    <div class="pdf-viewer-container">
+        <div class="pdf-controls">
+            <button id="prev-page">Previous</button>
+            <span id="page-info">Page <span id="page-num"></span> of <span id="page-count"></span></span>
+            <button id="next-page">Next</button>
+            
+        </div>
+        <button id="close-pdf"></button>
+        <canvas id="pdf-canvas"></canvas>
+    </div>
+    
+    <div class="website-container">
+        <div id="current-website" class="website current">
+            <!-- Your current page content -->
+        </div>
+        <div id="next-website" class="website next">
+            <!-- Next page content will be loaded here -->
+        </div>
+    </div>
+   
+    <div class="gif-container" id="gif-container">
+        <img src="output.gif" alt="Loading GIF" id="loading-gif">
+    </div>
+    
+
+    <!-- Hidden div to store cached pages -->
+    <div id="website-cache"></div>
+
+    <div class="content"></div>
+
+    <div class="transition-overlay"></div>
+
+    <div class="content-container">
+        <a href="index.html" class="logo-container" onclick="window.location.href='index.html'; return false;">
+            <div class="logo"></div> 
+        </a>
+        
+        <div class="transition-overlay"></div>
+        <div class="grid-container">
+            <div class="card" id="sketchbook-card" style="background-image: url('./cards_bg/sketchbook_bg.png');">
+                Sketchbook
+            </div>
+            <div class="card" id="ui-wprk-card" style="background-image: url('./cards_bg/ui_work_bg.png');">
+                UI Work
+            </div>
+            <div class="card" id="1st-year-collection-card" style="background-image: url('./cards_bg/1st_year_collection_bg.png');">
+                1st Year Collection
+            </div>
+            <div class="card" id="other-work-card" style="background-image: url('./cards_bg/other_work_bg.png');">
+                Other Work
+            </div>
+        </div>
+        <div class="back-arrow" style="display: none;">></div>
+        
+        <div class="sidebar">
+            <ul>
+                <li><a href="projects.html" class="website-transition">Projects</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

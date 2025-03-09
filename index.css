@@ -1,0 +1,236 @@
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+            background-image: url('bg_image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            
+            background-attachment: fixed;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            color: white;
+        }
+
+        
+        .website-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .website {
+            position: absolute;
+            width: 100%;
+            min-height: 100vh;
+            transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .website.next {
+            transform: translateY(100%);
+        }
+
+        .website.current {
+            transform: translateY(0);
+        }
+
+        .website.prev {
+            transform: translateY(-100%);
+        }
+
+
+        /* Cache for preloaded content */
+        #website-cache {
+            display: none;
+        }
+
+        #website-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        .content-container {
+            position: relative;
+            min-height: 100vh;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        /* Transition states */
+        .transitioning-out .content-container {
+            transform: translateY(-100vh);
+        }
+
+        .transitioning-in .content-container {
+            transform: translateY(0);
+        }
+
+
+        .logo-container {
+            position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  /* Adjust the width and height to your desired size */
+  width: 50px;
+  height: 50px;
+  background-image: url('logo.png');
+  background-size: contain; /* Ensures the image fits within the container */
+  background-repeat: no-repeat;
+  
+        }
+
+        .letters-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none; /* Allows clicking through to elements behind */
+        }
+
+        .letter {
+            position: absolute;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 1;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            /* Container for future SVG replacement */
+            width: 40px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto; /* Makes letters clickable */
+        }
+
+        /* .letters-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50vw;
+            height: 100vh;
+            pointer-events: none; 
+        }
+
+        .letter {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto; 
+        } */
+        .sidebar {
+    position: fixed;
+    bottom: 0; /* Stick to the bottom of the viewport */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center align */
+    width: 100%; /* Full width to span across the screen */
+    background-color: rgba(0, 0, 0, 0);
+    padding: 10px 0;
+    backdrop-filter: blur(0px);
+    display: flex;
+    justify-content: center; /* Center the links horizontally */
+}
+
+.sidebar ul {
+    display: flex; /* Arrange items in a row */
+    gap: 30px; /* Space between links */
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+
+.sidebar li {
+    list-style: none;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 10px;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.sidebar a:hover {
+    transform: translateY(-5px);
+    color: #f0f0f0;
+}
+
+        
+
+
+        /* Hover effect for letters */
+        .letter:hover {
+            transform: scale(1.2);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .letters-container {
+                width: 80vw;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                bottom: 0;
+                top: auto;
+                padding: 20px;
+            }
+
+            .content {
+                right: 20px;
+                bottom: 100px;
+                top: auto;
+                transform: none;
+            }
+        }
+
+        .content {
+            /* Your content styles */
+        }
+
+        /* Add transition overlay */
+        .transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 998;
+        }
+
+        .transitioning .transition-overlay {
+            opacity: 1;
+        }
+
+ 
