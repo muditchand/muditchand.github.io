@@ -44,11 +44,8 @@ class PageTransitioner {
         }
     }
 
-<<<<<<< HEAD
-=======
-    
 
->>>>>>> 83c173f1d75ad97b20b981e4ec6f2824d203ee80
+
     async loadPage(url) {
         this.transitioning = true;
         let content = this.cache.querySelector(`#cache-${url}`);
@@ -91,7 +88,7 @@ class PageTransitioner {
     }
 }
 
-<<<<<<< HEAD
+
 // PDF viewer functionality
 class PDFViewer {
     constructor() {
@@ -290,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.pdfViewer = new PDFViewer();
     
     // Initialize flipbook
-=======
+
 // Initialize PageTransitioner on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
     window.transitioner = new PageTransitioner();
@@ -384,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
    $(document).ready(function() {
->>>>>>> 83c173f1d75ad97b20b981e4ec6f2824d203ee80
+
     $("#flipbook").turn({
         width: 500,
         height: 400,
@@ -448,7 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 150);
     });
 
-<<<<<<< HEAD
+
     // Back arrow click handler
     $('.back-arrow').click(function() {
         // Check if sketchbook is active
@@ -461,11 +458,11 @@ document.addEventListener('DOMContentLoaded', () => {
             $('.pdf-collection-container').removeClass('active');
         }
         
-=======
+
     // Back arrow click handler (keeping as backup close method)
     $('.back-arrow').click(function() {
         closeSketchbook();
->>>>>>> 83c173f1d75ad97b20b981e4ec6f2824d203ee80
+
         setTimeout(() => {
             $('.grid-container').removeClass('slide-out');
         }, 150);
@@ -474,10 +471,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeSketchbook() {
         $('.close-book').removeClass('visible');
-<<<<<<< HEAD
-=======
+
+
         $('.back-arrow').removeClass('visible'); // Also hide back arrow
->>>>>>> 83c173f1d75ad97b20b981e4ec6f2824d203ee80
+
         
         // Add transition before returning to first page
         $("#flipbook").css({
@@ -492,7 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
             $("#flipbook").css({
                 'transition': 'none'
             });
-<<<<<<< HEAD
+
         }, 500);
     }
 });
@@ -508,10 +505,9 @@ window.addEventListener('load', () => {
     document.body.classList.add('loaded');
 });
 
-=======
+
             // Ensure grid container returns
             $('.grid-container').removeClass('slide-out');
         }, 500);
     }
-});
->>>>>>> 83c173f1d75ad97b20b981e4ec6f2824d203ee80
+)
