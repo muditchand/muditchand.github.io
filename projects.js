@@ -146,10 +146,13 @@ class PDFViewer {
     async loadPDFThumbnails() {
         // For demonstration purposes, we'll use a predefined number of PDFs
         // In a real application, you might want to fetch a directory listing
-        const pdfCount = 1; // Assuming 10 PDFs named pdf1.pdf through pdf10.pdf
-        
-        for (let i = 1; i <= pdfCount; i++) {
-            const pdfPath = `pdfs/pdf${i}.pdf`;
+        const pdfNames = {
+            "pdf1.pdf": "RuTAG Logo Submission",
+            
+        };
+    
+        for (const [filename, displayName] of Object.entries(pdfNames)) {
+            const pdfPath = `pdfs/${filename}`;
             
             try {
                 // Create PDF item
@@ -161,7 +164,7 @@ class PDFViewer {
                 
                 const title = document.createElement('div');
                 title.className = 'pdf-title';
-                title.textContent = `Project ${i}`;
+                title.textContent = displayName;
                 
                 pdfItem.appendChild(thumbnail);
                 pdfItem.appendChild(title);
