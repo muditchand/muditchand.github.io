@@ -151,7 +151,9 @@ class PDFViewer {
             "pdf2.pdf": "IISc Calander 2025",
             "pdf4.pdf": "Rubric: A stop-motion innovation",
             "pdf6.pdf": "Amul Chocolate: Stakeholder Analysis and BMC", 
+            "pdf7.pdf": "Micro Project: 'Tangled Wires???'",
             "pdf8.pdf": "Creative Engineering Design: Chair",
+            "pdf9.pdf": "Storyboarding",
         };
     
         for (const [filename, displayName] of Object.entries(pdfNames)) {
