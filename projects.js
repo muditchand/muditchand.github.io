@@ -44,8 +44,6 @@ class PageTransitioner {
         }
     }
 
-
-
     async loadPage(url) {
         this.transitioning = true;
         let content = this.cache.querySelector(`#cache-${url}`);
@@ -87,7 +85,6 @@ class PageTransitioner {
         });
     }
 }
-
 
 // PDF viewer functionality
 class PDFViewer {
@@ -149,13 +146,10 @@ class PDFViewer {
     async loadPDFThumbnails() {
         // For demonstration purposes, we'll use a predefined number of PDFs
         // In a real application, you might want to fetch a directory listing
-        const pdfNames = {
-            "pdf1.pdf": "RuTAG Logo Submission",
-            
-        };
-    
-        for (const [filename, displayName] of Object.entries(pdfNames)) {
-            const pdfPath = `pdfs/${filename}`;
+        const pdfCount = 1; // Assuming 10 PDFs named pdf1.pdf through pdf10.pdf
+        
+        for (let i = 1; i <= pdfCount; i++) {
+            const pdfPath = `pdfs/pdf${i}.pdf`;
             
             try {
                 // Create PDF item
@@ -167,7 +161,7 @@ class PDFViewer {
                 
                 const title = document.createElement('div');
                 title.className = 'pdf-title';
-                title.textContent = displayName;
+                title.textContent = `Project ${i}`;
                 
                 pdfItem.appendChild(thumbnail);
                 pdfItem.appendChild(title);
@@ -208,8 +202,6 @@ class PDFViewer {
             }
         }
     }
-
-    
     
     async openPDF(pdfPath) {
         try {
@@ -227,13 +219,6 @@ class PDFViewer {
             
             // Show the PDF viewer
             this.pdfViewerContainer.style.display = 'flex';
-        
-            setTimeout(() => {
-                const canvasRect = this.pdfCanvas.getBoundingClientRect();
-                this.closeButton.style.top = (canvasRect.top + 10) + 'px';
-                this.closeButton.style.right = (window.innerWidth - canvasRect.right + 10) + 'px';
-            }, 100);
-        
         } catch (error) {
             console.error('Error opening PDF:', error);
         }
@@ -287,101 +272,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.pdfViewer = new PDFViewer();
     
     // Initialize flipbook
-
-// Initialize PageTransitioner on DOMContentLoaded
-document.addEventListener('DOMContentLoaded', () => {
-    window.transitioner = new PageTransitioner();
-});
-
-// Browser Back/Forward Button Handler
-window.addEventListener('popstate', () => {
-    if (!window.transitioner.transitioning) {
-        window.transitioner.loadPage(window.location.pathname);
-    }
-});
-window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
-});
-
-
-// Click Transition Handler for Page Links
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('a.page-transition').forEach(link => {
-        link.addEventListener('click', async (e) => {
-            e.preventDefault();
-            const nextPage = link.href;
-            document.body.classList.add('transitioning-out');
-
-            await new Promise(resolve => setTimeout(resolve, 500));
-            window.location.href = nextPage;
-        });
-    });
-});
-
-
-
-
-    // Show the GIF on page load
-
-   
-
-
-    // Function to remove the GIF container from the DOM
-    function removeGifContainer() {
-        // Select the GIF container using querySelector
-        const gifContainer = document.querySelector(".gif-container");
-        
-        if (gifContainer) {
-            gifContainer.remove(); // Delete the entire div
-            console.log("GIF container removed after 7000ms"); // Log message to console
-        } else {
-            console.log("GIF container not found."); // If no element found
-        }
-    }
-
-    // gif removal
-    window.onload = function() {
-        console.log("Page loaded, starting timer for GIF removal...");
-        setTimeout(removeGifContainer, 7000); // Call removeGifContainer after 7000ms
-    };
-
-
-
-//shifting the container for grid cards
-    document.addEventListener('DOMContentLoaded', () => {
-        const gridContainer = document.querySelector('.grid-container');
-        const backArrow = document.querySelector('.back-arrow');
-        const cards = document.querySelectorAll('.card');
-    
-        cards.forEach(card => {
-            card.addEventListener('click', (e) => {
-                e.preventDefault(); // Prevent default navigation
-                gridContainer.classList.add('slide-out');
-                
-                // Show the arrow with a slight delay
-                setTimeout(() => {
-                    backArrow.style.display = 'block';
-                    setTimeout(() => {
-                        backArrow.classList.add('visible');
-                    }, 50);
-                }, 300);
-            });
-        });
-    
-        // moving shifting the back arrow
-        backArrow.addEventListener('click', () => {
-            gridContainer.classList.remove('slide-out');
-            backArrow.classList.remove('visible');
-            
-            // Hide the arrow completely after the fade out
-            setTimeout(() => {
-                backArrow.style.display = 'none';
-            }, 300);
-        });
-    });
-
-   $(document).ready(function() {
-
     $("#flipbook").turn({
         width: 500,
         height: 400,
@@ -445,7 +335,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 150);
     });
 
-
     // Back arrow click handler
     $('.back-arrow').click(function() {
         // Check if sketchbook is active
@@ -458,11 +347,6 @@ document.addEventListener('DOMContentLoaded', () => {
             $('.pdf-collection-container').removeClass('active');
         }
         
-
-    // Back arrow click handler (keeping as backup close method)
-    $('.back-arrow').click(function() {
-        closeSketchbook();
-
         setTimeout(() => {
             $('.grid-container').removeClass('slide-out');
         }, 150);
@@ -471,10 +355,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeSketchbook() {
         $('.close-book').removeClass('visible');
-
-
-        $('.back-arrow').removeClass('visible'); // Also hide back arrow
-
         
         // Add transition before returning to first page
         $("#flipbook").css({
@@ -489,7 +369,6 @@ document.addEventListener('DOMContentLoaded', () => {
             $("#flipbook").css({
                 'transition': 'none'
             });
-
         }, 500);
     }
 });
@@ -505,9 +384,4 @@ window.addEventListener('load', () => {
     document.body.classList.add('loaded');
 });
 
-
-            // Ensure grid container returns
-            $('.grid-container').removeClass('slide-out');
-        }, 500);
-    }
-)
+//
