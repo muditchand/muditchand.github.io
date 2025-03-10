@@ -338,6 +338,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 300);
     });
 
+    $('#1st-year-collection-card').click(function() {
+        $('.grid-container').addClass('slide-out');
+        $('.back-arrow').addClass('visible');
+    
+        setTimeout(() => {
+            $('.pdf-collection-container').addClass('active');
+        }, 300);
+    });
+
+    $('.back-arrow').click(function() {
+        if ($('.sketchbook-container').hasClass('active')) {
+            closeSketchbook();
+        }
+    
+        if ($('.pdf-collection-container').hasClass('active')) {
+            $('.pdf-collection-container').removeClass('active');
+        }
+    
+        setTimeout(() => {
+            $('.grid-container').removeClass('slide-out');
+        }, 150);
+    
+        $(this).removeClass('visible');
+    });
+    
+    $('.close-pdf-collection').click(function() {
+        $('.pdf-collection-container').removeClass('active');
+    
+        setTimeout(() => {
+            $('.grid-container').removeClass('slide-out');
+            $('.back-arrow').removeClass('visible');
+        }, 150);
+    });
+    
+    
+
     // Fixed close button click handler
     $('.close-book').click(function() {
         closeSketchbook();
