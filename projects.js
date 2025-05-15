@@ -154,6 +154,7 @@ class PDFViewer {
             "pdf7.pdf": "Micro Project: 'Tangled Wires???'",
             "pdf8.pdf": "Creative Engineering Design: Chair",
             "pdf9.pdf": "Storyboarding",
+            "pdf10.pdf": "Cigarette Packaging, Semiotics and Design",
         };
     
         for (const [filename, displayName] of Object.entries(pdfNames)) {
