@@ -1,5 +1,4 @@
-
-        * {
+* {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -78,18 +77,23 @@
         }
 
 
+        /* Logo container styles */
         .logo-container {
-            position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  /* Adjust the width and height to your desired size */
-  width: 50px;
-  height: 50px;
-  background-image: url('logo.png');
-  background-size: contain; /* Ensures the image fits within the container */
-  background-repeat: no-repeat;
-  
+            position: fixed; /* Keep the logo fixed in place */
+            top: 20px; /* Adjust the vertical position */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Center align */
+            width: 50px; /* Adjust the width of the logo */
+            height: 50px; /* Adjust the height of the logo */
+            z-index: 2000; /* Ensure it stays above other elements */
+        }
+
+        .logo {
+            width: 100%;
+            height: 100%;
+            background-image: url('logo.png'); /* Set the logo image */
+            background-size: contain; /* Ensure the image fits within the container */
+            background-repeat: no-repeat; /* Prevent the image from repeating */
         }
 
         .letters-container {
@@ -141,17 +145,19 @@
             justify-content: center;
             pointer-events: auto; 
         } */
-        .sidebar {
-    position: fixed;
+        /* Sidebar styles */
+.sidebar {
+    position: fixed; /* Keep the sidebar fixed in place */
     bottom: 0; /* Stick to the bottom of the viewport */
     left: 50%; /* Center horizontally */
     transform: translateX(-50%); /* Center align */
     width: 100%; /* Full width to span across the screen */
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0); /* Transparent background */
     padding: 10px 0;
     backdrop-filter: blur(0px);
     display: flex;
     justify-content: center; /* Center the links horizontally */
+    z-index: 1000; /* Ensure it stays above other elements */
 }
 
 .sidebar ul {
@@ -161,7 +167,6 @@
     margin: 0;
     list-style: none;
 }
-
 
 .sidebar li {
     list-style: none;
@@ -233,4 +238,3 @@
             opacity: 1;
         }
 
- 

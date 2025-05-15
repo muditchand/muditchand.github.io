@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
+    <!-- Logo container moved outside of content-container -->
+    <div class="logo-container">
+        <div class="logo"></div>
+    </div>
 
     <div class="page-container">
         <div id="current-page" class="page current">
@@ -24,30 +28,23 @@
     <!-- Hidden div to store cached pages -->
     <div id="page-cache"></div>
 
-
-    <div class="content">
-
-    </div>
+    <div class="content"></div>
 
     <div class="transition-overlay"></div>
     <div class="content-container">
-        <div class="logo-container">
-            <!-- Logo placeholder -->
-        </div>
-
         <div class="letters-container" id="letters">
             <!-- Letters will be dynamically placed here -->
         </div>
-
-        <div class="sidebar">
-            <ul>
-                <li><a href="projects.html" class="page-transition">Projects</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </div>
-
     </div>
 
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul>
+            <li><a href="projects.html" class="page-transition">Projects</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </div>
 </body>
+</html>
 
