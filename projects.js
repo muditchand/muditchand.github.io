@@ -433,3 +433,8 @@ window.addEventListener('load', () => {
     document.body.classList.add('loaded');
 });
 
+document.addEventListener('mousemove', function(event) {
+  const x = (event.clientX / window.innerWidth) * 100;
+  const y = (event.clientY / window.innerHeight) * 100;
+  console.log(`Cursor position: ${x}vw, ${y}vh`);
+});
