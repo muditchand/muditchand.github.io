@@ -1,50 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <script src="./jquery-3.7.1.js" ></script>
-    <script src="./turn.min.js"></script>
-    <title>Mudit Chand</title>
-    
-    <script src="index.js"></script>
-    <link rel="stylesheet" href="index.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mudit Chand</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Logo container moved outside of content-container -->
-    <div class="logo-container">
-        <div class="logo"></div>
-    </div>
+  
+  <main class="stage" id="stage" data-v="home">
+    <img class="bg" src="assets/bg.png" alt="">
+    <a class="logo" href="#/" aria-label="Home"><img src="assets/logo.png" alt="M"></a>
+    <div class="np" id="np" hidden><div class="art"></div><div class="txt"><small></small><b></b></div></div>
 
-    <div class="page-container">
-        <div id="current-page" class="page current">
-            <!-- Your current page content -->
-        </div>
-        <div id="next-page" class="page next">
-            <!-- Next page content will be loaded here -->
-        </div>
-    </div>
+    <!-- HOME -->
+    <section class="view active" id="home">
+      <nav class="nav">
+        <a href="#/projects/art">Projects</a>
+        <a href="#/" class="on">Home</a>
+        <a href="#/about">About Me</a>
+      </nav>
+    </section>
 
-    <!-- Hidden div to store cached pages -->
-    <div id="page-cache"></div>
+    <!-- PROJECTS GRID -->
+    <section class="view" id="projects">
+      <div class="tabs" id="tabs"></div>
+      <div class="grid-wrap"><div class="grid" id="grid"></div></div>
+      <div class="moth" id="moth" aria-label="Moth, click anywhere to make her flutter">
+        <img class="dn" src="assets/moth.png" alt="">
+        <img class="up" src="assets/moth.png" alt="">
+      </div>
+      <a class="x" style="left:748px;top:261px" aria-label="Close"></a>
+    </section>
 
-    <div class="content"></div>
+    <!-- PROJECT DETAIL -->
+    <section class="view" id="detail">
+      <h1 class="title" id="d-title" style="left:40px;width:957px"></h1>
+      <div class="panel" id="d-main" style="left:40px;top:261px;width:957px;height:715px"></div>
+      <div class="panel" id="d-side" style="left:1011px;top:261px;width:390px;height:715px"></div>
+      <button class="arrow" id="d-prev" style="left:238px" aria-label="Previous project"></button>
+      <button class="arrow r" id="d-next" style="left:755px" aria-label="Next project"></button>
+      <a class="x" style="left:1377px;top:237px" aria-label="Close"></a>
+    </section>
 
-    <div class="transition-overlay"></div>
-    <div class="content-container">
-        <div class="letters-container" id="letters">
-            <!-- Letters will be dynamically placed here -->
-        </div>
-    </div>
+    <!-- PLUGINS AND SNIPPETS -->
+    <section class="view" id="plugins">
+      <h1 class="title" style="left:40px;width:871px">Other Work</h1>
+      <div class="panel" id="p-readme" style="left:40px;top:261px;width:871px;height:715px">
+        <h2>Append the README file here</h2>
+        <p>If README not found, add a fail state.</p>
+      </div>
+      <div class="panel" id="p-card" style="left:940px;top:261px;width:461px;height:715px"></div>
+      <button class="arrow" id="p-prev" style="left:238px" aria-label="Previous"></button>
+      <button class="arrow r" id="p-next" style="left:755px" aria-label="Next"></button>
+      <a class="x" style="left:1377px;top:237px" aria-label="Close"></a>
+    </section>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <ul>
-            <li><a href="projects.html" class="page-transition">Projects</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-    </div>
+    <!-- ABOUT -->
+    <section class="view" id="about">
+      <h1 class="title" style="left:40px;width:957px">About</h1>
+      <div class="panel" style="left:40px;top:261px;width:957px;height:715px">
+        <p>About text goes here.</p>
+      </div>
+      <a class="x" style="left:1377px;top:237px" aria-label="Close"></a>
+    </section>
+  </main>
+
+  <script src="vendor/jquery-3.7.1.js"></script>
+  <script src="vendor/turn.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
-
