@@ -1,2 +1,4 @@
 
 https://github.com/muditchand/youtube-notes-for-obsidian | YouTube Notes for Obsidian | obsidian.svg
+https://github.com/muditchand/note-linker-for-obsidian | Obsidian Notes Auto Linker | obsidian.svg
+https://github.com/muditchand/WaterPark | WaterPark : A Unity Exercise | unity.png
