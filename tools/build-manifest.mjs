@@ -1,44 +1,157 @@
-// Scans content/ and writes content/manifest.json.  Run from the repo root:  node tools/build-manifest.mjs
-import fs from 'node:fs';
-const ROOT = 'content';
-const IMG = /\.(png|jpe?g|webp|gif|avif)$/i, VID = /\.(mp4|webm|mov|m4v)$/i;
-const nat = (a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
-const strip = n => n.replace(/^\d+[-_. ]+/, '');                 // "01 Chair" shows as "Chair"; the number only sets the order
-const stem = n => n.replace(/\.[^.]+$/, '');
-const slug = t => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-const ls = d => fs.readdirSync(d, { withFileTypes: true }).filter(e => !e.name.startsWith('.')).sort((a, b) => nat(a.name, b.name));
-const front = f => {                                              // tiny "key: value" header between --- lines
-  const m = fs.readFileSync(f, 'utf8').match(/^---\r?\n([\s\S]*?)\r?\n---/), o = {};
-  (m ? m[1] : '').split(/\r?\n/).forEach(l => { const i = l.indexOf(':'); if (i > 0) o[l.slice(0, i).trim().toLowerCase()] = l.slice(i + 1).trim(); });
-  return o;
-};
-const icon = v => !v ? undefined : /^https?:|\//.test(v) ? v : 'assets/icons/' + v;
 
-const cats = [];
-for (const c of ls(ROOT).filter(e => e.isDirectory() && !e.name.startsWith('_'))) {
-  const dir = `${ROOT}/${c.name}`, all = ls(dir), names = all.map(e => e.name), projects = [];
-  for (const e of all) {
-    const p = `${dir}/${e.name}`; let o;
-    if (e.isFile() && /\.pdf$/i.test(e.name)) {                   // Name.pdf  (+ optional Name.md, Name.png)
-      const s = stem(e.name), mdn = names.find(x => x === s + '.md'), img = names.find(x => IMG.test(x) && stem(x) === s);
-      const m = mdn ? front(`${dir}/${mdn}`) : {};
-      o = { m, title: m.title || strip(s).replace(/_/g, ' '), pdf: p, md: mdn && `${dir}/${mdn}`, cover: m.cover ? `${dir}/${m.cover}` : img && `${dir}/${img}` };
-    } else if (e.isFile() && /\.md$/i.test(e.name) && !names.includes(stem(e.name) + '.pdf')) {   // Name.md on its own = text project
-      const m = front(p);
-      o = { m, title: m.title || strip(stem(e.name)).replace(/_/g, ' '), md: p, cover: m.cover && `${dir}/${m.cover}` };
-    } else if (e.isDirectory()) {                                 // Folder = text + media (+ pdf or image book)
-      const f = ls(p).filter(x => x.isFile()).map(x => x.name), q = n => `${p}/${n}`, find = re => f.find(x => re.test(x));
-      const mdn = find(/^(index|readme)\.md$/i), m = mdn ? front(q(mdn)) : {};
-      const media = f.filter(x => (IMG.test(x) || VID.test(x)) && !/^(cover|icon|book_front|book_back|paper)\./i.test(x)).map(q);
-      const fr = find(/^book_front\./i), bk = find(/^book_back\./i), cv = find(/^cover\./i), pdf = find(/\.pdf$/i), ic = find(/^icon\./i);
-      const pages = m.book === 'true' ? [fr, ...f.filter(x => /^\d+\./.test(x) && IMG.test(x)), bk].filter(Boolean).map(q) : undefined;
-      o = { m, title: m.title || strip(e.name).replace(/_/g, ' '), pdf: pdf && q(pdf), md: mdn && q(mdn), book: pages, media: media.length ? media : undefined,
-        cover: m.cover ? q(m.cover) : cv ? q(cv) : pages ? pages[0] : media.find(x => IMG.test(x)), icon: ic && q(ic) };
-    } else continue;
-    projects.push({ title: o.title, slug: slug(o.title), pdf: o.pdf, md: o.md, cover: o.cover, icon: icon(o.m.icon) || o.icon, size: o.m.size, book: o.book, media: o.media });
+import fs from "node:fs";
+
+const ROOT = "content";
+const IMAGE = /\.(png|jpe?g|webp|gif|avif)$/i;
+const VIDEO = /\.(mp4|webm|mov|m4v)$/i;
+
+const naturalSort = (a, b) =>
+  a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" });
+const stripOrder = name => name.replace(/^\d+[-_. ]+/, "");
+const stem = name => name.replace(/\.[^.]+$/, "");
+const slug = text => text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const humanize = text => {
+  const value = stripOrder(text).replace(/_/g, " ").trim();
+  return value ? value[0].toUpperCase() + value.slice(1) : value;
+};
+const list = directory => fs.readdirSync(directory, { withFileTypes: true })
+  .filter(entry => !entry.name.startsWith("."))
+  .sort((a, b) => naturalSort(a.name, b.name));
+
+function readFrontmatter(file) {
+  const source = fs.readFileSync(file, "utf8");
+  const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
+  const metadata = {};
+  if (!match) return metadata;
+
+  for (const line of match[1].split(/\r?\n/)) {
+    const separator = line.indexOf(":");
+    if (separator <= 0) continue;
+    const key = line.slice(0, separator).trim().toLowerCase();
+    const value = line.slice(separator + 1).trim().replace(/^["']|["']$/g, "");
+    metadata[key] = value;
   }
-  const lab = strip(c.name);
-  cats.push({ slug: slug(lab), label: /[A-Z]/.test(lab) ? lab : lab.replace(/\b\w/g, x => x.toUpperCase()), projects });
+  return metadata;
 }
-fs.writeFileSync(`${ROOT}/manifest.json`, JSON.stringify({ cats }, null, 1));
-console.log(cats.map(c => `${c.label}: ${c.projects.length} project(s)`).join('\n') || 'No category folders found in content/');
+
+const iconPath = value => {
+  if (!value) return undefined;
+  return /^https?:\/\//i.test(value) || value.includes("/")
+    ? value
+    : `assets/icons/${value}`;
+};
+
+if (!fs.existsSync(ROOT)) {
+  throw new Error(`Missing ${ROOT}/ directory. Run this script from the repository root.`);
+}
+
+const categories = [];
+
+for (const categoryEntry of list(ROOT).filter(entry =>
+  entry.isDirectory() && !entry.name.startsWith("_")
+)) {
+  const categoryPath = `${ROOT}/${categoryEntry.name}`;
+  const entries = list(categoryPath);
+  const names = entries.map(entry => entry.name);
+  const projects = [];
+
+  for (const entry of entries) {
+    const entryPath = `${categoryPath}/${entry.name}`;
+    let project;
+
+    if (entry.isFile() && /\.pdf$/i.test(entry.name)) {
+      const base = stem(entry.name);
+      const markdownName = names.find(name => name.toLowerCase() === `${base}.md`.toLowerCase());
+      const coverName = names.find(name => IMAGE.test(name) && stem(name) === base);
+      const metadata = markdownName ? readFrontmatter(`${categoryPath}/${markdownName}`) : {};
+
+      project = {
+        metadata,
+        title: metadata.title || humanize(base),
+        pdf: entryPath,
+        md: markdownName ? `${categoryPath}/${markdownName}` : undefined,
+        cover: metadata.cover ? `${categoryPath}/${metadata.cover}` :
+          coverName ? `${categoryPath}/${coverName}` : undefined
+      };
+    } else if (entry.isFile() && /\.md$/i.test(entry.name) &&
+      !names.some(name => name.toLowerCase() === `${stem(entry.name)}.pdf`.toLowerCase())) {
+      const metadata = readFrontmatter(entryPath);
+      project = {
+        metadata,
+        title: metadata.title || humanize(stem(entry.name)),
+        md: entryPath,
+        cover: metadata.cover ? `${categoryPath}/${metadata.cover}` : undefined
+      };
+    } else if (entry.isDirectory()) {
+      const folderPath = entryPath;
+      const files = list(folderPath)
+        .filter(child => child.isFile())
+        .map(child => child.name);
+      const pathFor = name => `${folderPath}/${name}`;
+      const find = expression => files.find(name => expression.test(name));
+      const markdownName = find(/^(index|readme)\.md$/i);
+      const metadata = markdownName ? readFrontmatter(pathFor(markdownName)) : {};
+      const frontCover = find(/^book_front\./i);
+      const backCover = find(/^book_back\./i);
+      const explicitCover = find(/^cover\./i);
+      const pdfName = find(/\.pdf$/i);
+      const iconName = find(/^icon\./i);
+      const numberedPages = files.filter(name =>
+        /^\d+\.(png|jpe?g|webp|avif)$/i.test(name)
+      );
+
+      
+      const isBook = metadata.book !== "false" && numberedPages.length > 0 &&
+        (metadata.book === "true" || (frontCover && backCover));
+      const bookPages = isBook
+        ? [frontCover, ...numberedPages, backCover].filter(Boolean).map(pathFor)
+        : undefined;
+
+      const media = files
+        .filter(name => (IMAGE.test(name) || VIDEO.test(name)) &&
+          !/^(cover|icon|book_front|book_back|paper)\./i.test(name) &&
+          !(isBook && numberedPages.includes(name)))
+        .map(pathFor);
+
+      project = {
+        metadata,
+        title: metadata.title || humanize(entry.name),
+        pdf: pdfName ? pathFor(pdfName) : undefined,
+        md: markdownName ? pathFor(markdownName) : undefined,
+        book: bookPages,
+        media: media.length ? media : undefined,
+        cover: metadata.cover ? pathFor(metadata.cover) :
+          explicitCover ? pathFor(explicitCover) :
+          bookPages ? bookPages[0] :
+          media.find(path => IMAGE.test(path)),
+        icon: iconName ? pathFor(iconName) : undefined
+      };
+    } else {
+      continue;
+    }
+
+    projects.push({
+      title: project.title,
+      slug: slug(project.title),
+      pdf: project.pdf,
+      md: project.md,
+      cover: project.cover,
+      icon: iconPath(project.metadata.icon) || project.icon,
+      size: project.metadata.size,
+      book: project.book,
+      media: project.media
+    });
+  }
+
+  const label = categoryEntry.name;
+  categories.push({
+    slug: slug(label),
+    label,
+    projects
+  });
+}
+
+fs.writeFileSync(`${ROOT}/manifest.json`, JSON.stringify({ cats: categories }, null, 2) + "\n");
+console.log(categories.map(category =>
+  `${category.label}: ${category.projects.length} project(s)`
+).join("\n") || `No category folders found in ${ROOT}/`);

@@ -1,5 +1,6 @@
 ---
 title: Sketchbook
 book: true
-cover: book_front.png
 ---
+
+Sketches done in spare time. More to be added here if I ever wish to put a pencil on paper again.

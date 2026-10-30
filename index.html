@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#00087D">
   <title>Mudit Chand</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,22 +11,23 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  
   <main class="stage" id="stage" data-v="home">
     <img class="bg" src="assets/bg.png" alt="">
     <a class="logo" href="#/" aria-label="Home"><img src="assets/logo.png" alt="M"></a>
-    <div class="np" id="np" hidden><div class="art"></div><div class="txt"><small></small><b></b></div></div>
 
-    <!-- HOME -->
+    <div class="np" id="np" hidden>
+      <div class="art"></div>
+      <div class="txt"><small></small><b></b></div>
+    </div>
+
     <section class="view active" id="home">
       <nav class="nav">
         <a href="#/projects/art">Projects</a>
         <a href="#/" class="on">Home</a>
-        <a href="#/about">About Me</a>
+        <a href="#/about">About</a>
       </nav>
     </section>
 
-    <!-- PROJECTS GRID -->
     <section class="view" id="projects">
       <div class="tabs" id="tabs"></div>
       <div class="grid-wrap"><div class="grid" id="grid"></div></div>
@@ -33,44 +35,58 @@
         <img class="dn" src="assets/moth.png" alt="">
         <img class="up" src="assets/moth.png" alt="">
       </div>
-      <a class="x" style="left:748px;top:261px" aria-label="Close"></a>
+      <a class="x" style="left:748px;top:261px" href="#/" aria-label="Close"></a>
     </section>
 
-    <!-- PROJECT DETAIL -->
     <section class="view" id="detail">
       <h1 class="title" id="d-title" style="left:40px;width:957px"></h1>
       <div class="panel" id="d-main" style="left:40px;top:261px;width:957px;height:715px"></div>
+      <div class="book-controls" id="book-controls" hidden></div>
       <div class="panel" id="d-side" style="left:1011px;top:261px;width:390px;height:715px"></div>
-      <button class="arrow" id="d-prev" style="left:238px" aria-label="Previous project"></button>
-      <button class="arrow r" id="d-next" style="left:755px" aria-label="Next project"></button>
-      <a class="x" style="left:1377px;top:237px" aria-label="Close"></a>
+      <button class="arrow" id="d-prev" style="left:238px" aria-label="Previous project">
+        <svg viewBox="0 0 44 44" aria-hidden="true"><path d="M7 22 33 6Q39 2 39 9V35Q39 42 33 38Z"/></svg>
+      </button>
+      <button class="arrow r" id="d-next" style="left:755px" aria-label="Next project">
+        <svg viewBox="0 0 44 44" aria-hidden="true"><path d="M7 22 33 6Q39 2 39 9V35Q39 42 33 38Z"/></svg>
+      </button>
+      <a class="x" style="left:1377px;top:237px" href="#/" aria-label="Close"></a>
     </section>
 
-    <!-- PLUGINS AND SNIPPETS -->
-    <section class="view" id="plugins">
-      <h1 class="title" style="left:40px;width:871px">Other Work</h1>
-      <div class="panel" id="p-readme" style="left:40px;top:261px;width:871px;height:715px">
-        <h2>Append the README file here</h2>
-        <p>If README not found, add a fail state.</p>
-      </div>
-      <div class="panel" id="p-card" style="left:940px;top:261px;width:461px;height:715px"></div>
-      <button class="arrow" id="p-prev" style="left:238px" aria-label="Previous"></button>
-      <button class="arrow r" id="p-next" style="left:755px" aria-label="Next"></button>
-      <a class="x" style="left:1377px;top:237px" aria-label="Close"></a>
+    <section class="view" id="other-work">
+      <h1 class="title" style="left:0;width:1440px">Other Work</h1>
+      <div class="grid-wrap other-grid-wrap"><div class="grid" id="other-grid"></div></div>
+      <a class="x" style="left:1357px;top:261px" href="#/" aria-label="Close"></a>
     </section>
 
-    <!-- ABOUT -->
+    <section class="view" id="other-work-detail">
+      <h1 class="title" id="ow-title" style="left:40px;width:957px"></h1>
+      <div class="panel" id="ow-readme" style="left:40px;top:261px;width:871px;height:715px"></div>
+      <div class="panel" id="ow-card" style="left:940px;top:261px;width:461px;height:715px"></div>
+      <button class="arrow" id="ow-prev" style="left:238px" aria-label="Previous repository">
+        <svg viewBox="0 0 44 44" aria-hidden="true"><path d="M7 22 33 6Q39 2 39 9V35Q39 42 33 38Z"/></svg>
+      </button>
+      <button class="arrow r" id="ow-next" style="left:755px" aria-label="Next repository">
+        <svg viewBox="0 0 44 44" aria-hidden="true"><path d="M7 22 33 6Q39 2 39 9V35Q39 42 33 38Z"/></svg>
+      </button>
+      <a class="x" style="left:1377px;top:237px" href="#/other-work" aria-label="Back to Other Work"></a>
+    </section>
+
     <section class="view" id="about">
       <h1 class="title" style="left:40px;width:957px">About</h1>
       <div class="panel" style="left:40px;top:261px;width:957px;height:715px">
         <p>About text goes here.</p>
       </div>
-      <a class="x" style="left:1377px;top:237px" aria-label="Close"></a>
+      <div class="about-image" style="left:1011px;top:261px;width:390px;height:715px">
+        <img src="assets/about.jpg" alt="Portrait" onload="this.parentElement.classList.add('has-image')" onerror="this.remove()">
+        <span>Place your portrait at <code>assets/about.jpg</code></span>
+      </div>
+      <a class="x" style="left:1377px;top:237px" href="#/" aria-label="Close"></a>
     </section>
   </main>
 
-  <script src="vendor/jquery-3.7.1.js"></script>
-  <script src="vendor/turn.min.js"></script>
+
+  <script src="jquery-3.7.1.js"></script>
+  <script src="turn.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
