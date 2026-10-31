@@ -1,4 +1,4 @@
- :root {
+:root {
   --blue: #00087D;
   --white: #FFFFFF;
   --panel: rgba(255, 255, 255, .92);
@@ -59,8 +59,13 @@ button { border: 0; background: none; cursor: pointer; font: inherit; }
 
 .tabs {
   position: absolute; left: 59px; top: 222px; width: 713px;
-  display: flex; justify-content: center; align-items: baseline; gap: 30px; white-space: nowrap;
+  display: flex; justify-content: safe center; align-items: baseline; gap: 30px; white-space: nowrap;
+  overflow-x: auto; overflow-y: hidden; padding: 0 28px 8px; scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 28px, #000 calc(100% - 28px), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 28px, #000 calc(100% - 28px), transparent);
 }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs a { flex: none; }
 .tabs a { font-size: 20px; font-weight: 300; transition: opacity .2s; opacity: .9; }
 .tabs a:hover { opacity: 1; }
 .tabs a.on { font-size: 28px; font-weight: 700; opacity: 1; }
@@ -291,4 +296,70 @@ mark { background: var(--blue); color: #fff; padding: 0 .3em; border-radius: 4px
 
 @media (prefers-reduced-motion: reduce) {
   * { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
+
+/* Other Work tiles use the shared grid; icons are shown whole, not cropped */
+.tile.icon img { object-fit: contain; object-position: center; padding: 14%; }
+.tile .ph { position: absolute; inset: 0; display: grid; place-items: center; font-size: 56px; color: var(--blue); opacity: .35; }
+
+/* Interactables */
+.app-frame { display: block; width: 100%; height: 100%; border: 0; background: #fff; }
+.shelf { height: 100%; overflow-y: auto; padding: 36px 40px; color: #1d1d26; }
+.shelf .stats { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.shelf .only { display: block; font-size: 15px; margin-bottom: 18px; }
+.book { padding: 16px 0; border-top: 1px solid rgba(0,8,125,.15); }
+.book h3 { font-size: 20px; font-weight: 600; line-height: 1.3; }
+.book .by { font-size: 15px; opacity: .7; }
+.book .st { color: var(--blue); letter-spacing: 2px; margin: 4px 0; }
+.book .rv { font-size: 16px; line-height: 1.55; white-space: pre-wrap; }
+
+/* Hero interactables */
+.ink { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.hero-moth { left: 120px; top: 700px; width: 150px; height: 150px; transition-property: left, top; transition-timing-function: cubic-bezier(.45,.05,.3,1); }
+.moth.flying .up { animation: flap .17s ease-in-out infinite; }
+
+
+/* Book log: one written review at a time. Existing shelf and flipbook styles remain intact. */
+.rv-card { height: 100%; display: flex; flex-direction: column; padding: 30px 40px 28px; color: #1d1d26; }
+.rv-stats { font-size: 15px; opacity: .7; margin-bottom: 40px; }
+.rv-body { flex: 1; min-height: 0; display: flex; gap: 32px; }
+.rv-cover {
+  flex: none; width: 220px; height: 330px; display: grid; place-items: center;
+  text-align: center; padding: 14px; border-radius: 8px; overflow: hidden;
+  background: #e4e4f1; color: var(--blue); font-weight: 600;
+  box-shadow: 0 8px 22px rgba(0,8,125,.25);
+}
+.rv-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.rv-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.rv-title { font-size: 28px; font-weight: 600; line-height: 1.25; }
+.rv-by { font-size: 16px; opacity: .7; margin-top: 2px; }
+.rv-st { color: var(--blue); letter-spacing: 2px; margin: 8px 0 4px; white-space: pre; }
+.rv-copy {
+  flex: 1; min-height: 0; overflow-y: auto; margin-top: 10px; padding-right: 8px;
+  font-size: 17px; line-height: 1.6; white-space: pre-wrap; scrollbar-width: thin;
+}
+.rv-next {
+  align-self: flex-end; flex: none; margin-top: 16px; height: 44px; padding: 0 22px;
+  border: 1px solid var(--blue); border-radius: 4px; color: var(--blue); font-size: 16px;
+}
+.rv-next:hover { background: var(--blue); color: #fff; }
+
+/* Cursor-following moth and animated eye overlays. */
+.hero-moth { left: 0; top: 0; width: 150px; height: 150px; will-change: transform; }
+.hero-moth .up { animation: flap var(--wing, .32s) ease-in-out infinite; }
+.eye {
+  position: absolute; pointer-events: none; border-radius: 50%;
+  transition: transform .18s ease-out;
+  background: repeating-conic-gradient(var(--blue) 0 1.2deg, #fff 1.2deg 11deg);
+}
+.eye::after {
+  content: ""; position: absolute; inset: 25%; border-radius: 50%; background: #fff;
+}
+
+@media (max-width: 700px) {
+  .rv-card { padding: 20px; }
+  .rv-body { gap: 18px; }
+  .rv-cover { width: 120px; height: 180px; }
+  .rv-title { font-size: 21px; }
+  .rv-copy { font-size: 15px; }
 }

@@ -1,4 +1,3 @@
-
 const W = 1440, H = 1174;
 const $ = (selector, root = document) => root.querySelector(selector);
 const stage = $("#stage");
@@ -141,14 +140,17 @@ function route() {
       back = "#/other-work";
       showRepository(Number(parts[1]));
     } else {
-      view = "other-work";
+      view = "projects";
       showOtherWork();
     }
   } else if (parts[0] === "about") {
     view = "about";
   }
 
-  if (view !== "detail") activeBook = null;
+  if (view !== "detail") {
+    activeBook = null;
+    $("#d-main .app-frame")?.remove(); // stop embedded apps/games when leaving
+  }
 
   document.querySelectorAll(".view").forEach(element => {
     element.classList.toggle("active", element.id === view);
@@ -183,11 +185,17 @@ async function drawPdfCover(canvas) {
   }
 }
 
-function showProjects(category) {
+function renderTabs(active) {
   const tabs = $("#tabs");
-  tabs.innerHTML = CATS.map(item =>
-    `<a href="#/projects/${item.slug}" class="${item === category ? "on" : ""}">${esc(item.label)}</a>`
-  ).join("") + `<a href="#/other-work">Other Work</a>`;
+  tabs.innerHTML = CATS.map(c =>
+    `<a href="#/projects/${c.slug}" class="${c.slug === active ? "on" : ""}">${esc(c.label)}</a>`
+  ).join("") + `<a href="#/other-work" class="${active === "__other" ? "on" : ""}">Other Work</a>`;
+  const on = tabs.querySelector(".on");
+  if (on) tabs.scrollTo({ left: on.offsetLeft - (tabs.clientWidth - on.offsetWidth) / 2, behavior: "smooth" });
+}
+
+function showProjects(category) {
+  renderTabs(category?.slug);
 
   const grid = $("#grid");
   if (!category || !category.projects?.length) {
@@ -200,7 +208,7 @@ function showProjects(category) {
       ? `<img src="${url(project.cover)}" alt="" loading="lazy">`
       : project.pdf
         ? `<canvas data-pdf="${esc(project.pdf)}"></canvas>`
-        : "";
+        : `<b class="ph">${project.app ? "\u25B6" : project.csv ? "\u2630" : ""}</b>`;
     return `<a class="tile ${project.size || SIZES[index % SIZES.length]}" href="#/projects/${category.slug}/${project.slug}">
       <div class="im">${visual}<span>${esc(project.title)}</span></div>
     </a>`;
@@ -258,6 +266,13 @@ async function showProject(category, index) {
   if (hasBook) {
     side.innerHTML = `${heading}<div class="md">${markdown}</div>`;
     await openBook(main, project, token);
+  } else if (project.app) {
+    side.innerHTML = `${heading}<div class="md">${markdown}</div>`;
+    const sandbox = "allow-scripts allow-pointer-lock allow-forms allow-modals" + (project.trust === "full" ? " allow-same-origin" : "");
+    main.innerHTML = `<iframe class="app-frame" src="${url(project.app)}" title="${esc(project.title)}" sandbox="${sandbox}" allow="fullscreen"></iframe>`;
+  } else if (project.csv) {
+    side.innerHTML = `${heading}<div class="md">${markdown}</div>`;
+    await renderBookshelf(main, project.csv, token);
   } else if (project.media?.length) {
     side.innerHTML = `${heading}<div class="md">${markdown}</div>`;
     main.innerHTML = `<div class="gal">${project.media.map(media => isVideo(media)
@@ -609,21 +624,24 @@ async function githubApi(path) {
 }
 
 async function showOtherWork() {
-  const grid = $("#other-grid");
-  grid.innerHTML = '<p class="loading-state">Loading repositories…</p>';
+  renderTabs("__other");
+  const grid = $("#grid");
+  grid.innerHTML = '<p class="loading-state">Loading repositories\u2026</p>';
   const repos = await loadRepositories();
+  if (!/^#\/other-work\/?$/.test(location.hash)) return;
   if (!repos.length) {
     grid.innerHTML = '<p class="empty-state">Add GitHub repository links to content/plugins.txt, one per line.</p>';
     return;
   }
   grid.innerHTML = repos.map((repo, index) => `
-    <a class="tile ${SIZES[index % SIZES.length]}" href="#/other-work/${index}">
+    <a class="tile ico ${SIZES[index % SIZES.length]}" href="#/other-work/${index}">
       <div class="im">
-        ${repo.icon ? `<img src="assets/icons/${url(repo.icon)}" alt="">` : ""}
+        ${repo.icon ? `<img src="assets/icons/${url(repo.icon)}" alt="">` : '<b class="ph"></b>'}
         <span>${esc(repo.title)}</span>
       </div>
     </a>
   `).join("");
+  $(".grid-wrap").scrollTop = 0;
 }
 
 async function showRepository(index) {
@@ -787,3 +805,189 @@ addEventListener("keydown", event => {
     if (right) $(".arrow.r", activeView)?.click();
   }
 });
+
+
+/* Scrollable category tabs: vertical wheel scrolls them sideways. */
+$("#tabs").addEventListener("wheel", e => {
+  if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { e.currentTarget.scrollLeft += e.deltaY; e.preventDefault(); }
+}, { passive: false });
+
+/* StoryGraph CSV -> review shelf. Export from StoryGraph (Manage Account > Export) and drop the .csv in the project folder. */
+function parseCSV(text) {
+  const rows = []; let row = [], cell = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
+    else if (c === '"') q = true;
+    else if (c === ",") { row.push(cell); cell = ""; }
+    else if (c === "\n" || c === "\r") { if (c === "\r" && text[i + 1] === "\n") i++; row.push(cell); cell = ""; if (row.some(Boolean)) rows.push(row); row = []; }
+    else cell += c;
+  }
+  row.push(cell); if (row.some(Boolean)) rows.push(row);
+  return rows;
+}
+
+const coverCache = new Map();
+
+const loadCoverImage = src => new Promise(resolve => {
+  const image = new Image();
+  image.onload = () => resolve(image.naturalWidth > 1 ? src : null);
+  image.onerror = () => resolve(null);
+  image.src = src;
+});
+
+async function bookCover(book) {
+  const key = book.isbn || `${book.title}|${book.authors}`;
+  if (coverCache.has(key)) return coverCache.get(key);
+
+  let src = null;
+  if (book.isbn) {
+    src = await loadCoverImage(
+      `https://covers.openlibrary.org/b/isbn/${encodeURIComponent(book.isbn)}-L.jpg?default=false`
+    );
+  }
+
+  if (!src) {
+    try {
+      const params = new URLSearchParams({
+        title: book.title,
+        author: book.authors.split(",")[0],
+        limit: "1",
+        fields: "cover_i"
+      });
+      const response = await fetch(`https://openlibrary.org/search.json?${params}`);
+      if (response.ok) {
+        const data = await response.json();
+        const coverId = data.docs?.[0]?.cover_i;
+        if (coverId) {
+          src = await loadCoverImage(`https://covers.openlibrary.org/b/id/${Number(coverId)}-L.jpg`);
+        }
+      }
+    } catch (error) {
+      console.warn("Could not retrieve a book cover:", error);
+    }
+  }
+
+  coverCache.set(key, src);
+  return src;
+}
+
+/* Convert StoryGraph review HTML into readable plain text. */
+function cleanReview(html) {
+  const textArea = document.createElement("textarea");
+  const withBreaks = String(html || "")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/div>\s*<div[^>]*>/gi, "\n")
+    .replace(/<\/p>\s*<p[^>]*>/gi, "\n\n")
+    .replace(/<[^>]+>/g, "");
+  textArea.innerHTML = withBreaks;
+  return textArea.value
+    .replace(/\u00A0/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+async function renderBookshelf(host, csvPath, token) {
+  host.innerHTML = '<div class="loading-state">Loading reviews…</div>';
+
+  try {
+    const csv = (await fetchText(url(csvPath))).replace(/^\uFEFF/, "");
+    const rows = parseCSV(csv);
+    if (!rows.length) {
+      host.innerHTML = '<div class="loading-state">The CSV is empty.</div>';
+      return;
+    }
+    if (token !== requestToken) return;
+
+    const head = rows.shift().map(value => value.trim().toLowerCase());
+    const get = (row, name) => {
+      const index = head.indexOf(name);
+      return index >= 0 ? (row[index] || "") : "";
+    };
+
+    const books = rows.map(row => ({
+      title: get(row, "title").trim(),
+      authors: get(row, "authors").trim(),
+      isbn: get(row, "isbn/uid").trim(),
+      status: get(row, "read status").toLowerCase(),
+      rating: parseFloat(get(row, "star rating")) || 0,
+      review: cleanReview(get(row, "review")),
+      date: get(row, "last date read")
+    })).filter(book => book.title && book.status === "read");
+
+    const reviewed = books.filter(book => book.review);
+    const rated = books.filter(book => book.rating > 0);
+    const average = rated.length
+      ? (rated.reduce((sum, book) => sum + book.rating, 0) / rated.length).toFixed(2)
+      : "–";
+
+    if (!reviewed.length) {
+      host.innerHTML = `<div class="loading-state">No written reviews found. ${books.length} books were marked as read.</div>`;
+      return;
+    }
+
+    const stars = rating =>
+      "★".repeat(Math.floor(rating)) + (rating % 1 >= 0.5 ? "½" : "");
+
+    host.innerHTML = `
+      <div class="rv-card">
+        <p class="rv-stats">${books.length} books read · average ${average} ★ · ${reviewed.length} written reviews</p>
+        <div class="rv-body">
+          <div class="rv-cover"><span></span></div>
+          <div class="rv-text">
+            <h3 class="rv-title"></h3>
+            <p class="rv-by"></p>
+            <p class="rv-st"></p>
+            <div class="rv-copy"></div>
+          </div>
+        </div>
+        <button type="button" class="rv-next">Another review</button>
+      </div>`;
+
+    let bag = [];
+    let current = null;
+    let displayToken = 0;
+
+    const nextReview = () => {
+      if (!bag.length) {
+        bag = reviewed.slice();
+        for (let i = bag.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [bag[i], bag[j]] = [bag[j], bag[i]];
+        }
+        if (bag.length > 1 && bag[bag.length - 1] === current) {
+          [bag[0], bag[bag.length - 1]] = [bag[bag.length - 1], bag[0]];
+        }
+      }
+      return bag.pop();
+    };
+
+    const showReview = async book => {
+      const thisDisplay = ++displayToken;
+      current = book;
+
+      $(".rv-title", host).textContent = book.title;
+      $(".rv-by", host).textContent = book.authors;
+      $(".rv-st", host).textContent = book.rating
+        ? `${stars(book.rating)}  ${book.rating}/5`
+        : "";
+      const copy = $(".rv-copy", host);
+      copy.textContent = book.review;
+      copy.scrollTop = 0;
+
+      const cover = $(".rv-cover", host);
+      cover.innerHTML = `<span>${esc(book.title)}</span>`;
+
+      const coverUrl = await bookCover(book);
+      if (thisDisplay === displayToken && coverUrl && cover.isConnected) {
+        cover.innerHTML = `<img src="${esc(coverUrl)}" alt="Cover of ${esc(book.title)}">`;
+      }
+    };
+
+    $(".rv-next", host).addEventListener("click", () => showReview(nextReview()));
+    showReview(nextReview());
+  } catch (error) {
+    console.error("Could not render the book reviews:", error);
+    host.innerHTML = `<div class="loading-state">Could not load the CSV. ${esc(error.message || "Unknown error")}</div>`;
+  }
+}

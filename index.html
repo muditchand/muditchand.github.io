@@ -13,6 +13,7 @@
 <body>
   <main class="stage" id="stage" data-v="home">
     <img class="bg" src="assets/bg.png" alt="">
+    <canvas class="ink" id="ink"></canvas>
     <a class="logo" href="#/" aria-label="Home"><img src="assets/logo.png" alt="M"></a>
 
     <div class="np" id="np" hidden>
@@ -21,6 +22,10 @@
     </div>
 
     <section class="view active" id="home">
+      <div class="moth hero-moth" id="hero-moth" aria-hidden="true">
+        <img class="dn" src="assets/moth.png" alt="">
+        <img class="up" src="assets/moth.png" alt="">
+      </div>
       <nav class="nav">
         <a href="#/projects/art">Projects</a>
         <a href="#/" class="on">Home</a>
@@ -50,12 +55,6 @@
         <svg viewBox="0 0 44 44" aria-hidden="true"><path d="M7 22 33 6Q39 2 39 9V35Q39 42 33 38Z"/></svg>
       </button>
       <a class="x" style="left:1377px;top:237px" href="#/" aria-label="Close"></a>
-    </section>
-
-    <section class="view" id="other-work">
-      <h1 class="title" style="left:0;width:1440px">Other Work</h1>
-      <div class="grid-wrap other-grid-wrap"><div class="grid" id="other-grid"></div></div>
-      <a class="x" style="left:1357px;top:261px" href="#/" aria-label="Close"></a>
     </section>
 
     <section class="view" id="other-work-detail">
@@ -91,5 +90,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
   <script src="app.js"></script>
+  <script src="hero.js"></script>
 </body>
 </html>

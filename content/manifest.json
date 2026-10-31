@@ -1,49 +1,18 @@
 {
   "cats": [
     {
-      "slug": "art",
-      "label": "Art",
-      "projects": [
-        {
-          "title": "Sketchbook",
-          "slug": "sketchbook",
-          "md": "content/Art/sketchbook/index.md",
-          "cover": "content/Art/sketchbook/book_front.png",
-          "book": [
-            "content/Art/sketchbook/book_front.png",
-            "content/Art/sketchbook/1.jpg",
-            "content/Art/sketchbook/2.jpg",
-            "content/Art/sketchbook/3.jpg",
-            "content/Art/sketchbook/4.jpg",
-            "content/Art/sketchbook/5.jpg",
-            "content/Art/sketchbook/6.jpg",
-            "content/Art/sketchbook/7.jpg",
-            "content/Art/sketchbook/8.jpeg",
-            "content/Art/sketchbook/9.jpeg",
-            "content/Art/sketchbook/10.jpg",
-            "content/Art/sketchbook/11.jpg",
-            "content/Art/sketchbook/12.jpg",
-            "content/Art/sketchbook/13.jpg",
-            "content/Art/sketchbook/14.jpg",
-            "content/Art/sketchbook/15.jpg",
-            "content/Art/sketchbook/book_back.png"
-          ]
-        }
-      ]
-    },
-    {
       "slug": "design-engineering",
       "label": "Design Engineering",
       "projects": [
         {
           "title": "A Retrofit Sit-to-Stand Assistive System",
           "slug": "a-retrofit-sit-to-stand-assistive-system",
-          "pdf": "content/Design Engineering/01 A Retrofit Sit-to-Stand Assistive System.pdf"
+          "pdf": "content/01 Design Engineering/01 A Retrofit Sit-to-Stand Assistive System.pdf"
         },
         {
           "title": "RUBRIC Stop Motion Animation Kit",
           "slug": "rubric-stop-motion-animation-kit",
-          "pdf": "content/Design Engineering/02 RUBRIC Stop Motion Animation Kit.pdf"
+          "pdf": "content/01 Design Engineering/02 RUBRIC Stop Motion Animation Kit.pdf"
         }
       ]
     },
@@ -54,22 +23,65 @@
         {
           "title": "Cigarette Branding",
           "slug": "cigarette-branding",
-          "pdf": "content/Visual Design/01 Cigarette Branding.pdf"
+          "pdf": "content/02 Visual Design/01 Cigarette Branding.pdf"
         },
         {
           "title": "IISc Calander 2025",
           "slug": "iisc-calander-2025",
-          "pdf": "content/Visual Design/02 IISc Calander 2025.pdf"
+          "pdf": "content/02 Visual Design/02 IISc Calander 2025.pdf"
         },
         {
           "title": "RuTAG Logo Design",
           "slug": "rutag-logo-design",
-          "pdf": "content/Visual Design/03 RuTAG Logo Design.pdf"
+          "pdf": "content/02 Visual Design/03 RuTAG Logo Design.pdf"
         },
         {
           "title": "Storyboarding",
           "slug": "storyboarding",
-          "pdf": "content/Visual Design/04 Storyboarding.pdf"
+          "pdf": "content/02 Visual Design/04 Storyboarding.pdf"
+        }
+      ]
+    },
+    {
+      "slug": "art",
+      "label": "Art",
+      "projects": [
+        {
+          "title": "Sketchbook",
+          "slug": "sketchbook",
+          "md": "content/03 Art/Sketchbook/index.md",
+          "cover": "content/03 Art/Sketchbook/book_front.png",
+          "book": [
+            "content/03 Art/Sketchbook/book_front.png",
+            "content/03 Art/Sketchbook/1.jpg",
+            "content/03 Art/Sketchbook/2.jpg",
+            "content/03 Art/Sketchbook/3.jpg",
+            "content/03 Art/Sketchbook/4.jpg",
+            "content/03 Art/Sketchbook/5.jpg",
+            "content/03 Art/Sketchbook/6.jpg",
+            "content/03 Art/Sketchbook/7.jpg",
+            "content/03 Art/Sketchbook/8.jpeg",
+            "content/03 Art/Sketchbook/9.jpeg",
+            "content/03 Art/Sketchbook/10.jpg",
+            "content/03 Art/Sketchbook/11.jpg",
+            "content/03 Art/Sketchbook/12.jpg",
+            "content/03 Art/Sketchbook/13.jpg",
+            "content/03 Art/Sketchbook/14.jpg",
+            "content/03 Art/Sketchbook/15.jpg",
+            "content/03 Art/Sketchbook/book_back.png"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "interactables",
+      "label": "Interactables",
+      "projects": [
+        {
+          "title": "Book Log",
+          "slug": "book-log",
+          "md": "content/04 Interactables/Book Log/index.md",
+          "csv": "content/04 Interactables/Book Log/book-log.csv"
         }
       ]
     }

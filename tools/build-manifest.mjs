@@ -96,6 +96,8 @@ for (const categoryEntry of list(ROOT).filter(entry =>
       const explicitCover = find(/^cover\./i);
       const pdfName = find(/\.pdf$/i);
       const iconName = find(/^icon\./i);
+      const appName = find(/^index\.html$/i);
+      const csvName = find(/\.csv$/i);
       const numberedPages = files.filter(name =>
         /^\d+\.(png|jpe?g|webp|avif)$/i.test(name)
       );
@@ -124,7 +126,9 @@ for (const categoryEntry of list(ROOT).filter(entry =>
           explicitCover ? pathFor(explicitCover) :
           bookPages ? bookPages[0] :
           media.find(path => IMAGE.test(path)),
-        icon: iconName ? pathFor(iconName) : undefined
+        icon: iconName ? pathFor(iconName) : undefined,
+        app: appName ? pathFor(appName) : undefined,
+        csv: csvName ? pathFor(csvName) : undefined
       };
     } else {
       continue;
@@ -139,11 +143,14 @@ for (const categoryEntry of list(ROOT).filter(entry =>
       icon: iconPath(project.metadata.icon) || project.icon,
       size: project.metadata.size,
       book: project.book,
-      media: project.media
+      media: project.media,
+      app: project.app,
+      csv: project.csv,
+      trust: project.metadata.trust
     });
   }
 
-  const label = categoryEntry.name;
+  const label = stripOrder(categoryEntry.name); // "04 Interactables" -> "Interactables"
   categories.push({
     slug: slug(label),
     label,
