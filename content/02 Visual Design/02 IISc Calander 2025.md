@@ -1,0 +1,1 @@
+I Created the 2025 IISc Calander with [Rai Chakrabarti](https://www.linkedin.com/in/rai-chakrabarti/) showcasing the institute's history and culture through photographs clicked by Rai and Design created by me. 

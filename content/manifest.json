@@ -7,12 +7,14 @@
         {
           "title": "A Retrofit Sit-to-Stand Assistive System",
           "slug": "a-retrofit-sit-to-stand-assistive-system",
-          "pdf": "content/01 Design Engineering/01 A Retrofit Sit-to-Stand Assistive System.pdf"
+          "pdf": "content/01 Design Engineering/01 A Retrofit Sit-to-Stand Assistive System.pdf",
+          "md": "content/01 Design Engineering/01 A Retrofit Sit-to-Stand Assistive System.md"
         },
         {
           "title": "RUBRIC Stop Motion Animation Kit",
           "slug": "rubric-stop-motion-animation-kit",
-          "pdf": "content/01 Design Engineering/02 RUBRIC Stop Motion Animation Kit.pdf"
+          "pdf": "content/01 Design Engineering/02 RUBRIC Stop Motion Animation Kit.pdf",
+          "md": "content/01 Design Engineering/02 RUBRIC Stop Motion Animation Kit.md"
         }
       ]
     },
@@ -23,22 +25,26 @@
         {
           "title": "Cigarette Branding",
           "slug": "cigarette-branding",
-          "pdf": "content/02 Visual Design/01 Cigarette Branding.pdf"
+          "pdf": "content/02 Visual Design/01 Cigarette Branding.pdf",
+          "md": "content/02 Visual Design/01 Cigarette Branding.md"
         },
         {
           "title": "IISc Calander 2025",
           "slug": "iisc-calander-2025",
-          "pdf": "content/02 Visual Design/02 IISc Calander 2025.pdf"
+          "pdf": "content/02 Visual Design/02 IISc Calander 2025.pdf",
+          "md": "content/02 Visual Design/02 IISc Calander 2025.md"
         },
         {
           "title": "RuTAG Logo Design",
           "slug": "rutag-logo-design",
-          "pdf": "content/02 Visual Design/03 RuTAG Logo Design.pdf"
+          "pdf": "content/02 Visual Design/03 RuTAG Logo Design.pdf",
+          "md": "content/02 Visual Design/03 RuTAG Logo Design.md"
         },
         {
           "title": "Storyboarding",
           "slug": "storyboarding",
-          "pdf": "content/02 Visual Design/04 Storyboarding.pdf"
+          "pdf": "content/02 Visual Design/04 Storyboarding.pdf",
+          "md": "content/02 Visual Design/04 Storyboarding.md"
         }
       ]
     },
